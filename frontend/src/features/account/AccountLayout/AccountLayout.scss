@@ -1,0 +1,68 @@
+body {
+	background: url(../../../assets/images/background.jpg) no-repeat;
+	background-size: cover;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+
+	&::after {
+		content: ' ';
+		background: #000;
+		opacity: 0.5;
+		top: 0;
+		left: 0;
+		bottom: 0;
+		right: 0;
+		position: absolute;
+		z-index: -1;
+	}
+
+	.card {
+		width: 36em !important;
+		margin: 0 auto;
+		position: relative;
+
+		h3 {
+			margin-bottom: 0;
+		}
+
+		.logo {
+			text-align: center;
+		}
+		img {
+			max-height: 5em;
+			width: auto;
+		}
+	}
+
+	.account-footer {
+		width: 100%;
+		height: 1.867em;
+		background: #000;
+		opacity: 0.6;
+		position: fixed;
+		bottom: 0;
+		left: 0;
+		text-align: right;
+		align-items: baseline;
+
+		ul {
+			display: inline-block;
+			margin: 0;
+			padding: 0;
+			list-style: none;
+			margin-right: 0.667em;
+
+			li {
+				float: left;
+
+				&,
+				a {
+					color: #fff;
+					font-size: 0.8em;
+					margin-left: 0.8em;
+				}
+			}
+		}
+	}
+}

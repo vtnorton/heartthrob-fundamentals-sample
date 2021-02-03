@@ -19,6 +19,7 @@ namespace HFundamentals.Sample
 
         public void ConfigureServices(IServiceCollection services)
         {
+
             services.AddDbContext<ApplicationDbContext>(options =>
                 options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection")));
 
@@ -36,7 +37,7 @@ namespace HFundamentals.Sample
             if (env.IsDevelopment())
                 app.UseHeartthrobDevTools(userManager, roleManager, Configuration);
 
-            app.UseHttpsRedirection();
+            // app.UseHttpsRedirection();
             app.UseRouting();
             app.UseAuthorization();
             app.UseEndpoints(endpoints => { endpoints.MapControllers(); });
