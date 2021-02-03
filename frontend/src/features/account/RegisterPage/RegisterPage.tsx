@@ -1,12 +1,13 @@
 import 'heartthrob'
 import React, { useState } from 'react'
+import Taskbar from 'heartthrob-react/src/components/Card/Taskbar/Taskbar'
 import { useSelector } from 'react-redux'
 import { DefaultButton, IIconProps, PrimaryButton, Spinner, SpinnerSize, TextField } from '@fluentui/react'
 
 import AccountLayout from '../AccountLayout/AccountLayout'
-import Taskbar from 'heartthrob-react/src/components/Card/Taskbar/Taskbar'
 import { selectIsLoading } from '../AccountSelectors'
 import { RegisterRequest } from '../AccountTypes'
+import './RegisterPage.scss'
 
 const RegisterPage = () => {
 	const [firstName, setFirstName] = useState('')
@@ -39,6 +40,11 @@ const RegisterPage = () => {
 		const infoBox = document.querySelector(output)
 		infoBox.classList.add('validator')
 
+		infoBox.classList.remove('short')
+		infoBox.classList.remove('strong')
+		infoBox.classList.remove('weak')
+		infoBox.classList.remove('medium')
+
 		if (password.length < 8) {
 			infoBox.classList.add('short')
 			infoBox.innerHTML = 'A senha necessita ter pelo menos 8 caracteres.'
@@ -48,22 +54,19 @@ const RegisterPage = () => {
 			numberCount = (password.match(/[0-9]/g) || []).length
 			symbolCount = (password.match(/\W/g) || []).length
 
-			infoBox.classList.remove('short')
-			infoBox.classList.add('weak')
-
 			if (capsCount < 1) {
+				infoBox.classList.add('weak')
 				message = 'A senha precisa conter ao menos uma letra em maiúsculo.'
 			} else if (smallCount < 1) {
+				infoBox.classList.add('weak')
 				message = 'A senha precisa conter ao menos uma letra em minúsculo.'
 			} else if (numberCount < 1) {
+				infoBox.classList.add('weak')
 				message = 'A senha precisa conter ao menos um número.'
 			} else if (symbolCount < 1) {
-				infoBox.classList.remove('weak')
 				infoBox.classList.add('medium')
 				message = 'A senha precisa conter ao menos um caracter especial.'
 			} else {
-				infoBox.classList.remove('weak')
-				infoBox.classList.remove('medium')
 				infoBox.classList.add('strong')
 				message = 'Sua senha está forte.'
 			}
@@ -147,7 +150,6 @@ const RegisterPage = () => {
 					</div>
 				</div>
 
-				<div className='space-low'></div>
 				<Taskbar buttons={actionButtons()}></Taskbar>
 			</form>
 		</AccountLayout>
