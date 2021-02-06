@@ -1,7 +1,8 @@
 import { BrowserRouter, Route, Switch } from 'react-router-dom'
-import './index.scss'
 
 import AccountRoutes from './account/AccountRoutes'
+import AccountLayout from './account/AccountLayout/AccountLayout'
+import './index.scss'
 
 let routeConfig = []
 routeConfig = routeConfig.concat(AccountRoutes())

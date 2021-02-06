@@ -8,8 +8,11 @@ import AccountLayout from '../AccountLayout/AccountLayout'
 import { selectIsLoading } from '../AccountSelectors'
 import { RegisterRequest } from '../AccountTypes'
 import './RegisterPage.scss'
+import { useHistory } from 'react-router-dom'
 
 const RegisterPage = () => {
+	const history = useHistory()
+
 	const [firstName, setFirstName] = useState('')
 	const [lastName, setLastName] = useState('')
 	const [email, setEmail] = useState('')
@@ -29,7 +32,7 @@ const RegisterPage = () => {
 	}
 
 	const goToLogin = () => {
-		window.location.href = '/account/login'
+		history.push('/account/login')
 	}
 
 	// TODO: levar para o heartthrob

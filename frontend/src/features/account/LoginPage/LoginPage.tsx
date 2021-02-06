@@ -19,8 +19,10 @@ import AccountLayout from '../AccountLayout/AccountLayout'
 import { LoginRequest } from '../AccountTypes'
 import { actions } from '../AccountState'
 import { selectErrorMessage, selectIsLoading } from '../AccountSelectors'
+import { useHistory } from 'react-router-dom'
 
 const LoginPage = () => {
+	const history = useHistory()
 	const dispatch = useDispatch()
 
 	const [email, setEmail] = useState('')
@@ -37,7 +39,7 @@ const LoginPage = () => {
 	}
 
 	const goToRegister = () => {
-		window.location.href = '/account/register'
+		history.push('/account/register')
 	}
 
 	const leftButtons = () => {
