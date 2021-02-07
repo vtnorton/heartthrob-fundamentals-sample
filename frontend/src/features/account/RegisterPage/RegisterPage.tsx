@@ -1,17 +1,19 @@
 import 'heartthrob'
 import React, {FormEvent, useState} from 'react'
+import {useDispatch, useSelector} from 'react-redux'
+import {useHistory} from 'react-router-dom'
 import Taskbar from 'heartthrob-react/src/components/Card/Taskbar/Taskbar'
-import {useSelector} from 'react-redux'
 import {DefaultButton, IIconProps, PrimaryButton, Spinner, SpinnerSize, TextField} from '@fluentui/react'
 
-import AccountLayout from '../AccountLayout/AccountLayout'
+import AccountLayout, {showError} from '../AccountLayout/AccountLayout'
 import {selectIsLoading} from '../AccountSelectors'
 import {RegisterRequest} from '../AccountTypes'
 import './RegisterPage.scss'
-import {useHistory} from 'react-router-dom'
+import {actions} from '../AccountState'
 
 const RegisterPage = () => {
 	const history = useHistory()
+	const dispatch = useDispatch()
 
 	const [firstName, setFirstName] = useState('')
 	const [lastName, setLastName] = useState('')
@@ -28,7 +30,7 @@ const RegisterPage = () => {
 			lastName: lastName,
 			confirmPassword: confirmPassword,
 		}
-		// dispatch(actions.getToken(credentials))
+		dispatch(actions.createRegister(register))
 	}
 
 	const goToLogin = () => {
@@ -168,6 +170,8 @@ const RegisterPage = () => {
 						<span id='password-match'></span>
 					</div>
 				</div>
+
+				{showError}
 
 				<Taskbar buttons={actionButtons()}></Taskbar>
 			</form>

@@ -1,10 +1,38 @@
 import 'heartthrob'
 import Card from 'heartthrob-react/src/components/Card/index'
+import React from 'react'
+import {useDispatch, useSelector} from 'react-redux'
+import {MessageBar, MessageBarType} from '@fluentui/react'
 
 import './AccountLayout.scss'
+import {actions} from '../AccountState'
+import {selectErrorMessage} from '../AccountSelectors'
 
 interface Props {
 	children: any
+}
+
+//const dispatch = useDispatch()
+
+export function showError() {
+	const errorMessage = useSelector(selectErrorMessage)
+
+	// TODO: verificar mensagme de erro que não está sendo apagada
+	const clearError = () => {
+		const s = useDispatch()
+		s(actions.removeError())
+	}
+
+	if (errorMessage) {
+		return (
+			<>
+				<div className='space-low'></div>
+				<MessageBar messageBarType={MessageBarType.error} isMultiline={false} onDismiss={clearError} dismissButtonAriaLabel='Close'>
+					{errorMessage}
+				</MessageBar>
+			</>
+		)
+	}
 }
 
 const AccountLayout = (props: Props) => {
