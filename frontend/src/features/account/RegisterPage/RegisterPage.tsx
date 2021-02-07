@@ -1,14 +1,14 @@
 import 'heartthrob'
-import React, { useState } from 'react'
+import React, {FormEvent, useState} from 'react'
 import Taskbar from 'heartthrob-react/src/components/Card/Taskbar/Taskbar'
-import { useSelector } from 'react-redux'
-import { DefaultButton, IIconProps, PrimaryButton, Spinner, SpinnerSize, TextField } from '@fluentui/react'
+import {useSelector} from 'react-redux'
+import {DefaultButton, IIconProps, PrimaryButton, Spinner, SpinnerSize, TextField} from '@fluentui/react'
 
 import AccountLayout from '../AccountLayout/AccountLayout'
-import { selectIsLoading } from '../AccountSelectors'
-import { RegisterRequest } from '../AccountTypes'
+import {selectIsLoading} from '../AccountSelectors'
+import {RegisterRequest} from '../AccountTypes'
 import './RegisterPage.scss'
-import { useHistory } from 'react-router-dom'
+import {useHistory} from 'react-router-dom'
 
 const RegisterPage = () => {
 	const history = useHistory()
@@ -18,7 +18,7 @@ const RegisterPage = () => {
 	const [email, setEmail] = useState('')
 	const [confirmPassword, setConfirmPassword] = useState('')
 	const [password, setPassword] = useState('')
-	// const [isPasswordGood, setIsPasswordGood] = useState(true)
+	const [isAbleToRegister, setIsAbleToRegister] = useState(true)
 
 	const doRegister = () => {
 		const register: RegisterRequest = {
@@ -71,17 +71,54 @@ const RegisterPage = () => {
 				message = 'A senha precisa conter ao menos um caracter especial.'
 			} else {
 				infoBox.classList.add('strong')
-				message = 'Sua senha está forte.'
+				infoBox.innerHTML = 'Sua senha está forte.'
+				return true
 			}
 
 			infoBox.innerHTML = message
+			return false
 		}
+	}
+
+	// TODO: levar para o heartthrob
+	const checkPasswordMatch = (password: string, confirmPassword: string, output: string) => {
+		const infoBox = document.querySelector(output)
+		infoBox.classList.add('validator')
+
+		if (password !== confirmPassword) {
+			infoBox.classList.remove('strong')
+			infoBox.innerHTML = 'As senhas estão diferentes, por favor, tente novamente.'
+		} else {
+			infoBox.classList.add('strong')
+			infoBox.innerHTML = 'As senhas estão iguais.'
+			return true
+		}
+
+		return false
+	}
+
+	const onPasswordChange = (element: FormEvent<HTMLTextAreaElement>) => {
+		const value = (element.target as HTMLTextAreaElement).value
+		setPassword(value)
+		checkPasswordStrength(value, '#password-check')
+	}
+
+	const onConfirmPasswordChange = (element: FormEvent<HTMLTextAreaElement>) => {
+		const value = (element.target as HTMLTextAreaElement).value
+		const doesPasswordMatch = checkPasswordMatch(password, value, '#password-match')
+		setConfirmPassword(value)
+		checkPassword(doesPasswordMatch)
+	}
+
+	const checkPassword = (doesPasswordMatch: boolean) => {
+		const isStrong = checkPasswordStrength(password, '#password-check')
+		if (confirmPassword !== '') setIsAbleToRegister(!(isStrong && doesPasswordMatch))
 	}
 
 	const actionButtons = () => {
 		const isLoading = useSelector(selectIsLoading)
-		const registerIcon: IIconProps = { iconName: 'PeopleAdd' }
-		const loginIcon: IIconProps = { iconName: 'Permissions' }
+		const registerIcon: IIconProps = {iconName: 'PeopleAdd'}
+		const loginIcon: IIconProps = {iconName: 'Permissions'}
 
 		if (isLoading) {
 			return <Spinner size={SpinnerSize.medium} label='Registrando novo usuário' ariaLive='assertive' labelPosition='right' />
@@ -90,7 +127,7 @@ const RegisterPage = () => {
 		return (
 			<>
 				<DefaultButton text='Entrar' onClick={goToLogin} iconProps={loginIcon} />
-				<PrimaryButton text='Registrar' onClick={doRegister} iconProps={registerIcon} />
+				<PrimaryButton text='Registrar' disabled={isAbleToRegister} onClick={doRegister} iconProps={registerIcon} />
 			</>
 		)
 	}
@@ -103,15 +140,10 @@ const RegisterPage = () => {
 				<div className='space-low'></div>
 				<div className='row'>
 					<div className='col-md-6 col-sm-6'>
-						<TextField name='firstName' label='Nome' placeholder='Ellen' onChange={(e) => setFirstName((e.target as HTMLTextAreaElement).value)} />
+						<TextField name='firstName' label='Nome' placeholder='João' onChange={(e) => setFirstName((e.target as HTMLTextAreaElement).value)} />
 					</div>
 					<div className='col-md-6 col-sm-6'>
-						<TextField
-							name='lastName'
-							label='Sobrenome'
-							placeholder='Addams'
-							onChange={(e) => setLastName((e.target as HTMLTextAreaElement).value)}
-						/>
+						<TextField name='lastName' label='Sobrenome' placeholder='Silva' onChange={(e) => setLastName((e.target as HTMLTextAreaElement).value)} />
 					</div>
 				</div>
 
@@ -128,28 +160,12 @@ const RegisterPage = () => {
 
 				<div className='row'>
 					<div className='col-md-6 col-sm-6'>
-						<TextField
-							name='password'
-							label='Senha'
-							type='password'
-							onChange={(e) => {
-								const value = (e.target as HTMLTextAreaElement).value
-								checkPasswordStrength(value, '#password-check')
-								return setPassword(value)
-							}}
-						/>
+						<TextField name='password' label='Senha' canRevealPassword type='password' onChange={onPasswordChange} />
 						<span id='password-check'></span>
 					</div>
 					<div className='col-md-6 col-sm-6'>
-						<TextField
-							name='confirmPassword'
-							label='Confirmar senha'
-							type='password'
-							onChange={(e) => {
-								const value = (e.target as HTMLTextAreaElement).value
-								return setConfirmPassword(value)
-							}}
-						/>
+						<TextField name='confirmPassword' label='Confirmar senha' canRevealPassword type='password' onChange={onConfirmPasswordChange} />
+						<span id='password-match'></span>
 					</div>
 				</div>
 

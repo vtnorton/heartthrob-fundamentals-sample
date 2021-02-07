@@ -45,6 +45,7 @@
 		"no-use-before-define": "off",
 		"max-len": "off",
 		"semi": ["error", "never"],
+		"nonblock-statement-body-position": ["error", "below"],
 		"indent": [
 			"error",
 			"tab",
