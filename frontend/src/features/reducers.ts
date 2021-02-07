@@ -1,6 +1,11 @@
-import { combineReducers } from 'redux'
+import {combineReducers} from 'redux'
+import {connectRouter} from 'connected-react-router'
+
 import AccountReducer from './account/AccountState'
 
-export default combineReducers({
-	account: AccountReducer,
-})
+const createRootReducer = (history) =>
+	combineReducers({
+		router: connectRouter(history),
+		account: AccountReducer,
+	})
+export default createRootReducer

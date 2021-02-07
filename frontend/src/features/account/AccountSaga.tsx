@@ -1,5 +1,7 @@
+import {push} from 'connected-react-router'
 import {call, put, takeEvery} from 'redux-saga/effects'
 import {Result} from '../types'
+
 import AccountServices from './AccountServices'
 import {actions} from './AccountState'
 import {LoginRequest, RegisterRequest} from './AccountTypes'
@@ -16,7 +18,7 @@ export function* getToken({payload}: {type: string; payload: LoginRequest}) {
 			yield put(actions.isLoading(false))
 		} else {
 			yield put(actions.setToken({token: response.value.accessToken}))
-			// TODO: logado
+			yield put(push('/'))
 		}
 	} catch (error) {
 		yield call(console.error, 'Houve um erro ao entrar em contato com a API: ', error)
@@ -37,7 +39,8 @@ export function* sendRegister({payload}: {type: string; payload: RegisterRequest
 			yield put(actions.setError({message: response.errors[0]})) //TODO: função para mostrar todo o array
 			yield put(actions.isLoading(false))
 		} else {
-			// TODO: logado
+			yield put(actions.setToken({token: response.value.accessToken}))
+			yield put(push('/'))
 		}
 	} catch (error) {
 		yield call(console.error, 'Houve um erro ao entrar em contato com a API: ', error)

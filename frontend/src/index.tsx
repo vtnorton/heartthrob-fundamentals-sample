@@ -1,5 +1,5 @@
-import { render } from 'react-dom'
-import { Provider } from 'react-redux'
+import {render} from 'react-dom'
+import {Provider} from 'react-redux'
 import Features from './features'
 import InitEnv from './init-env'
 import InitRedux from './init-redux'
