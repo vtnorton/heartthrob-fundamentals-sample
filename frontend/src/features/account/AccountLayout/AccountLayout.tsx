@@ -1,12 +1,12 @@
 import 'heartthrob'
 import Card from 'heartthrob-react/src/components/Card/index'
 import React from 'react'
-import {useDispatch, useSelector} from 'react-redux'
-import {MessageBar, MessageBarType} from '@fluentui/react'
+import { useDispatch, useSelector } from 'react-redux'
+import { MessageBar, MessageBarType } from '@fluentui/react'
 
 import './AccountLayout.scss'
-import {actions} from '../AccountState'
-import {selectErrorMessage} from '../AccountSelectors'
+import { actions } from '../AccountState'
+import { selectErrorMessage } from '../AccountSelectors'
 
 interface Props {
 	children: any
@@ -37,7 +37,7 @@ export function showError() {
 
 const AccountLayout = (props: Props) => {
 	return (
-		<>
+		<section className='account'>
 			<Card acrylic={true}>
 				<div className='logo'>HFundamentals.Sample</div>
 				<hr />
@@ -54,7 +54,7 @@ const AccountLayout = (props: Props) => {
 					</li>
 				</ul>
 			</footer>
-		</>
+		</section>
 	)
 }
 

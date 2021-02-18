@@ -49,7 +49,11 @@
 		"indent": [
 			"error",
 			"tab",
-			{ "MemberExpression": "off", "ObjectExpression": 1, "FunctionDeclaration": 1, "" }
+			{
+				"MemberExpression": "off",
+				"ObjectExpression": 1,
+				"FunctionDeclaration": 1
+			}
 		]
 	}
 }

@@ -1,5 +1,5 @@
-import {createSlice, PayloadAction} from '@reduxjs/toolkit'
-import {AccountState, LoginRequest, RegisterRequest} from './AccountTypes'
+import { createSlice, PayloadAction } from '@reduxjs/toolkit'
+import { AccountState, LoginRequest, RegisterRequest } from './AccountTypes'
 
 const initialState: AccountState = {
 	token: null,
@@ -11,16 +11,18 @@ const getToken = (state: AccountState, action: PayloadAction<LoginRequest>) => (
 	...state,
 })
 
-const setToken = (state: AccountState, action: PayloadAction<{token: string}>) => ({
-	...state,
-	token: action.payload.token,
-})
+const setToken = (state: AccountState, action: PayloadAction<{ token: string }>) => {
+	localStorage.setItem('token', action.payload.token)
+	return {
+		...state,
+	}
+}
 
 const createRegister = (state: AccountState, action: PayloadAction<RegisterRequest>) => ({
 	...state,
 })
 
-const setError = (state: AccountState, action: PayloadAction<{message: string}>) => ({
+const setError = (state: AccountState, action: PayloadAction<{ message: string }>) => ({
 	...state,
 	errorMessage: action.payload.message,
 })
@@ -49,4 +51,4 @@ const slice = createSlice({
 })
 
 export default slice.reducer
-export const {actions} = slice
+export const { actions } = slice

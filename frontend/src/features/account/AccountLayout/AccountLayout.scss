@@ -1,4 +1,8 @@
-body {
+body,
+section {
+	height: 100%;
+}
+.account {
 	background: url(../../../assets/images/background.jpg) no-repeat;
 	background-size: cover;
 	display: flex;

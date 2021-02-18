@@ -1,14 +1,14 @@
 import 'heartthrob'
-import {useState} from 'react'
-import {useDispatch, useSelector} from 'react-redux'
+import { useState } from 'react'
+import { useDispatch, useSelector } from 'react-redux'
 import Taskbar from 'heartthrob-react/src/components/Card/Taskbar/Taskbar'
-import {ActionButton, Checkbox, DefaultButton, IIconProps, PrimaryButton, Spinner, SpinnerSize, TextField} from '@fluentui/react'
+import { ActionButton, Checkbox, DefaultButton, IIconProps, PrimaryButton, Spinner, SpinnerSize, TextField } from '@fluentui/react'
 
-import AccountLayout, {showError} from '../AccountLayout/AccountLayout'
-import {LoginRequest} from '../AccountTypes'
-import {actions} from '../AccountState'
-import {selectIsLoading} from '../AccountSelectors'
-import {useHistory} from 'react-router-dom'
+import AccountLayout, { showError } from '../AccountLayout/AccountLayout'
+import { LoginRequest } from '../AccountTypes'
+import { actions } from '../AccountState'
+import { selectIsLoading } from '../AccountSelectors'
+import { useHistory } from 'react-router-dom'
 
 const LoginPage = () => {
 	const history = useHistory()
@@ -32,14 +32,14 @@ const LoginPage = () => {
 	}
 
 	const leftButtons = () => {
-		const forgotPassword: IIconProps = {iconName: 'ChevronRight'}
+		const forgotPassword: IIconProps = { iconName: 'ChevronRight' }
 		return <ActionButton text='Esqueceu a sua senha' iconProps={forgotPassword} />
 	}
 
 	const actionButtons = () => {
 		const isLoading = useSelector(selectIsLoading)
-		const registerIcon: IIconProps = {iconName: 'PeopleAdd'}
-		const loginIcon: IIconProps = {iconName: 'Permissions'}
+		const registerIcon: IIconProps = { iconName: 'PeopleAdd' }
+		const loginIcon: IIconProps = { iconName: 'Permissions' }
 
 		if (isLoading) {
 			return <Spinner size={SpinnerSize.medium} label='Entrando' ariaLive='assertive' labelPosition='right' />
