@@ -1,15 +1,15 @@
 import 'heartthrob'
-import React, {FormEvent, useState} from 'react'
-import {useDispatch, useSelector} from 'react-redux'
-import {useHistory} from 'react-router-dom'
+import React, { FormEvent, useState } from 'react'
+import { useDispatch, useSelector } from 'react-redux'
+import { useHistory } from 'react-router-dom'
 import Taskbar from 'heartthrob-react/src/components/Card/Taskbar/Taskbar'
-import {DefaultButton, IIconProps, PrimaryButton, Spinner, SpinnerSize, TextField} from '@fluentui/react'
+import { DefaultButton, IIconProps, PrimaryButton, Spinner, SpinnerSize, TextField } from '@fluentui/react'
 
-import AccountLayout, {showError} from '../AccountLayout/AccountLayout'
-import {selectIsLoading} from '../AccountSelectors'
-import {RegisterRequest} from '../AccountTypes'
+import AccountLayout, { showError } from '../AccountLayout/AccountLayout'
+import { selectIsLoading } from '../AccountSelectors'
+import { RegisterRequest } from '../AccountTypes'
 import './RegisterPage.scss'
-import {actions} from '../AccountState'
+import { actions } from '../AccountState'
 
 const RegisterPage = () => {
 	const history = useHistory()
@@ -26,7 +26,7 @@ const RegisterPage = () => {
 		const register: RegisterRequest = {
 			email: email,
 			password: password,
-			firstName: firstName,
+			name: firstName,
 			lastName: lastName,
 			confirmPassword: confirmPassword,
 		}
@@ -119,8 +119,8 @@ const RegisterPage = () => {
 
 	const actionButtons = () => {
 		const isLoading = useSelector(selectIsLoading)
-		const registerIcon: IIconProps = {iconName: 'PeopleAdd'}
-		const loginIcon: IIconProps = {iconName: 'Permissions'}
+		const registerIcon: IIconProps = { iconName: 'PeopleAdd' }
+		const loginIcon: IIconProps = { iconName: 'Permissions' }
 
 		if (isLoading) {
 			return <Spinner size={SpinnerSize.medium} label='Registrando novo usuário' ariaLive='assertive' labelPosition='right' />
