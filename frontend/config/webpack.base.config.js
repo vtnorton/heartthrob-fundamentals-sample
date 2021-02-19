@@ -39,11 +39,7 @@ module.exports = (env) => {
 					},
 					{
 						test: /\.(css|scss)$/,
-						use: [
-							PLATFORM === 'production' ? MiniCssExtractPlugin.loader : 'style-loader',
-							'css-loader',
-							'sass-loader',
-						],
+						use: [PLATFORM === 'production' ? MiniCssExtractPlugin.loader : 'style-loader', 'css-loader', 'sass-loader'],
 					},
 					{
 						test: /\.(png|jpg|jpeg|gif|svg|woff|woff2|ttf|eot)$/,

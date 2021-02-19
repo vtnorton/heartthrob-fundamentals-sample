@@ -1,19 +1,20 @@
 import React from 'react'
 import { ConnectedRouter } from 'connected-react-router'
 import { Redirect, Route, Switch } from 'react-router-dom'
+import { initializeIcons } from '@fluentui/react'
 
 import { history } from '../init-redux'
-import { getToken } from './account/AccountSelectors'
 import AccountRoutes from './account/AccountRoutes'
 import DashboardRoutes from './dashboard/DashboardRoutes'
 import HeaderComponent from '../components/header/HeaderComponent'
 import './index.scss'
 
+const token: string = localStorage.getItem('token')
 const publicRoutes = [].concat(AccountRoutes())
 const privateRoutes = [].concat(DashboardRoutes())
 
 export default () => {
-	const token = localStorage.getItem('token')
+	initializeIcons()
 	const isAuthenticated = () => token !== null
 
 	const PrivateRoute = ({ component: Component, ...rest }) => (
@@ -33,7 +34,7 @@ export default () => {
 				))}
 				{privateRoutes.map((entry) => (
 					<>
-						<HeaderComponent />
+						<HeaderComponent token={token} />
 						<PrivateRoute {...entry} />
 					</>
 				))}

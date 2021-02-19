@@ -1,17 +1,65 @@
 import 'heartthrob'
-import { IIconProps } from '@fluentui/react'
+import jwt_decode from 'jwt-decode'
+import { Icon, IIconProps, Persona, IPersonaSharedProps } from '@fluentui/react'
 
 import { MenuItemType } from './HeaderComponentTypes'
+import './HeaderComponent.scss'
 
-const HeaderComponent = () => {
+function getIntials(value: string) {
+	value = removeSpecialCharacters(value)
+		.replace(/\W*(\w)\w*/g, '$1')
+		.toUpperCase()
+		.trim()
+	return value[0] + value[value.length - 1]
+}
+
+function removeSpecialCharacters(text: string) {
+	return text
+		.toLowerCase()
+		.replace(new RegExp('[ÁÀÂÃ]', 'gi'), 'a')
+		.replace(new RegExp('[ÉÈÊ]', 'gi'), 'e')
+		.replace(new RegExp('[ÍÌÎ]', 'gi'), 'i')
+		.replace(new RegExp('[ÓÒÔÕ]', 'gi'), 'o')
+		.replace(new RegExp('[ÚÙÛ]', 'gi'), 'u')
+		.replace(new RegExp('[Ç]', 'gi'), 'c')
+}
+
+function constructAccountMenu(token: string) {
 	const manageProfileIcon: IIconProps = { iconName: 'Permissions' }
 	const accountMenu: MenuItemType[] = [
 		{ icon: manageProfileIcon, name: 'Editar perfil', location: '/manage/profile' },
-		{ icon: manageProfileIcon, name: 'Enviar feedbacks', location: '/manage/feedback/send' },
-		{ icon: manageProfileIcon, name: 'Feedbacks', location: '/manage/feedback' },
-		{ icon: manageProfileIcon, name: 'Sair' },
+		// { icon: manageProfileIcon, name: 'Enviar feedbacks', location: '/manage/feedback/send' },
+		//	{ icon: manageProfileIcon, name: 'Feedbacks', location: '/manage/feedback' },
+		//	{ icon: manageProfileIcon, name: 'Sair' },
 	]
 
+	const decodedToken: any = jwt_decode(token) //TODO: criar interface para token
+	const name = decodedToken.unique_name[0]
+
+	const userProfile: IPersonaSharedProps = {
+		imageInitials: getIntials(name),
+		text: name,
+	}
+
+	return (
+		<li>
+			<Persona {...userProfile} coinSize={35} />
+			<ul className='menu dark right'>
+				{accountMenu.map((item, key) => (
+					<li key={key}>
+						<a href={item.location}>
+							<Icon iconName={item.icon.iconName} />
+							{item.name}
+						</a>
+					</li>
+				))}
+			</ul>
+		</li>
+	)
+}
+
+// TODO: Levar componente para o heartthrob-react
+const HeaderComponent = ({ token }) => {
 	return (
 		<header className='acrylic header'>
 			<div className='logo'>
@@ -86,21 +134,7 @@ const HeaderComponent = () => {
 							</li>
 						</ul>
 					</li>
-					<li>
-						<a>
-							<div className='user-img'>
-								<img src='@UserManager.GetUserAsync(User).Result.Avatar' />
-							</div>{' '}
-							TESTE TESTE
-						</a>
-						<ul className='menu dark right'>
-							{accountMenu.map((item, key) => (
-								<li key={key}>
-									<a href={item.location}>{item.name}</a>
-								</li>
-							))}
-						</ul>
-					</li>
+					{constructAccountMenu(token)}
 				</ul>
 			</div>
 		</header>

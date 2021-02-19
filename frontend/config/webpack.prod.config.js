@@ -9,32 +9,32 @@ const Visualizer = require('webpack-visualizer-plugin')
 const baseConfig = require('./webpack.base.config')
 
 const prodConfig = () => {
-  return merge([
-    {
-      mode: 'production',
-      optimization: {
-        runtimeChunk: 'single',
-        splitChunks: {
-          cacheGroups: {
-            vendor: {
-              test: /[\\/]node_modules[\\/]/,
-              name: 'vendors',
-              chunks: 'all',
-            },
-          },
-        },
-        minimizer: [new UglifyJsPlugin()],
-      },
-      plugins: [
-        new MiniCssExtractPlugin(),
-        new OptimizeCssAssetsPlugin(),
-        new Visualizer({ filename: './statistics.html' }),
-        new dotenv({ path: '.env.production' }),
-      ],
-    },
-  ])
+	return merge([
+		{
+			mode: 'production',
+			optimization: {
+				runtimeChunk: 'single',
+				splitChunks: {
+					cacheGroups: {
+						vendor: {
+							test: /[\\/]node_modules[\\/]/,
+							name: 'vendors',
+							chunks: 'all',
+						},
+					},
+				},
+				minimizer: [new UglifyJsPlugin()],
+			},
+			plugins: [
+				new MiniCssExtractPlugin(),
+				new OptimizeCssAssetsPlugin(),
+				new Visualizer({ filename: './statistics.html' }),
+				new dotenv({ path: '.env.production' }),
+			],
+		},
+	])
 }
 
 module.exports = (env) => {
-  return merge(baseConfig(env), prodConfig(env))
+	return merge(baseConfig(env), prodConfig(env))
 }
