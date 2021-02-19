@@ -15,14 +15,21 @@ const privateRoutes = [].concat(DashboardRoutes())
 
 export default () => {
 	initializeIcons()
-	const isAuthenticated = () => token !== null
 
+	const isAuthenticated = () => token !== null
 	const PrivateRoute = ({ component: Component, ...rest }) => (
 		<Route
 			{...rest}
-			render={(props) =>
-				isAuthenticated() ? <Component {...props} /> : <Redirect to={{ pathname: '/account/login', state: { from: props.location } }} />
-			}
+			render={(props) => {
+				if (isAuthenticated())
+					return (
+						<>
+							<HeaderComponent token={token} />
+							<Component {...props} />
+						</>
+					)
+				return <Redirect to={{ pathname: '/account/login', state: { from: props.location } }} />
+			}}
 		/>
 	)
 
@@ -33,10 +40,7 @@ export default () => {
 					<Route {...entry} />
 				))}
 				{privateRoutes.map((entry) => (
-					<>
-						<HeaderComponent token={token} />
-						<PrivateRoute {...entry} />
-					</>
+					<PrivateRoute {...entry} />
 				))}
 			</Switch>
 		</ConnectedRouter>

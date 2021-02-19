@@ -4,5 +4,5 @@ export interface MenuItemType {
 	icon: IIconProps
 	name: string
 	location?: string
-	action?: Function
+	action?: any // TODO: Descobrir
 }

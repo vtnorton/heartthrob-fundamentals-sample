@@ -1,6 +1,6 @@
 import 'heartthrob'
 import jwt_decode from 'jwt-decode'
-import { Icon, IIconProps, Persona, IPersonaSharedProps } from '@fluentui/react'
+import { Icon, Persona, IPersonaSharedProps } from '@fluentui/react'
 
 import { MenuItemType } from './HeaderComponentTypes'
 import './HeaderComponent.scss'
@@ -24,13 +24,17 @@ function removeSpecialCharacters(text: string) {
 		.replace(new RegExp('[Ç]', 'gi'), 'c')
 }
 
+function signOut() {
+	localStorage.removeItem('token')
+	window.location.href = '/account/login'
+}
+
 function constructAccountMenu(token: string) {
-	const manageProfileIcon: IIconProps = { iconName: 'Permissions' }
 	const accountMenu: MenuItemType[] = [
-		{ icon: manageProfileIcon, name: 'Editar perfil', location: '/manage/profile' },
+		{ icon: { iconName: 'UserOptional' }, name: 'Gerenciar conta', location: '/manage/profile' },
 		// { icon: manageProfileIcon, name: 'Enviar feedbacks', location: '/manage/feedback/send' },
 		//	{ icon: manageProfileIcon, name: 'Feedbacks', location: '/manage/feedback' },
-		//	{ icon: manageProfileIcon, name: 'Sair' },
+		{ icon: { iconName: 'SignOut' }, name: 'Sair', action: signOut },
 	]
 
 	const decodedToken: any = jwt_decode(token) //TODO: criar interface para token
@@ -41,17 +45,26 @@ function constructAccountMenu(token: string) {
 		text: name,
 	}
 
+	const menuContent = (item: MenuItemType) => {
+		return (
+			<>
+				<Icon iconName={item.icon.iconName} />
+				{item.name}
+			</>
+		)
+	}
+	const clickableItem = (item: MenuItemType) => {
+		if (item.action !== undefined) return <a onClick={item.action}>{menuContent(item)}</a>
+
+		return <a href={item.location}>{menuContent(item)}</a>
+	}
+
 	return (
 		<li>
 			<Persona {...userProfile} coinSize={35} />
 			<ul className='menu dark right'>
 				{accountMenu.map((item, key) => (
-					<li key={key}>
-						<a href={item.location}>
-							<Icon iconName={item.icon.iconName} />
-							{item.name}
-						</a>
-					</li>
+					<li key={key}>{clickableItem(item)}</li>
 				))}
 			</ul>
 		</li>
@@ -63,79 +76,11 @@ const HeaderComponent = ({ token }) => {
 	return (
 		<header className='acrylic header'>
 			<div className='logo'>
-				<img src='~/images/logo-white.png' />
+				<img src='~/images/logo-white.png' alt='Logo da aplicação' />
 			</div>
 			<div className='line'></div>
 			<div className='right'>
-				<ul>
-					<li className='search'>
-						<a>
-							<i className='fa fa-search'></i>
-						</a>
-						<input type='text' name='search' placeholder='Type here to search' />
-					</li>
-					<li>
-						<a id='notifications'>
-							<i className='fa fa-inbox'></i>
-						</a>
-					</li>
-					<li>
-						<a href='/Feedback/Send'>
-							<i className='far fa-smile'></i>
-						</a>
-					</li>
-					<li>
-						<a>
-							<i className='fa fa-cogs'></i>
-						</a>
-						<ul className='menu dark right'>
-							<li>
-								<a href='/Admin/Users'>
-									<i className='fa fa-users'></i>Equipe
-								</a>
-							</li>
-							<li>
-								<a href='#' className='more no-icon'>
-									Mais opções...
-								</a>
-								<ul>
-									<li>
-										<a href='/Admin/ManageFeedback/Index'>
-											<i className='fa fa-smile-wink'></i>Feedbacks
-										</a>
-									</li>
-									<li>
-										<a href=''>
-											<i className='fa fa-list'></i>Chamados
-										</a>
-									</li>
-									<li>
-										<a href='/Admin/Changelogs/Index'>
-											<i className='fa fa-share'></i>Alterações
-										</a>
-									</li>
-									<li>
-										<a href='/Admin/Terms'>
-											<i className='fa fa-file-alt'></i>Termos
-										</a>
-									</li>
-									<li>
-										<a href='#'>
-											<i className='fa fa-envelope'></i>E-mail
-										</a>
-									</li>
-								</ul>
-							</li>
-							<li className='line'></li>
-							<li>
-								<a href='/Admin/Settings/Index'>
-									<i className='fa fa-cogs'></i>Configurações
-								</a>
-							</li>
-						</ul>
-					</li>
-					{constructAccountMenu(token)}
-				</ul>
+				<ul>{constructAccountMenu(token)}</ul>
 			</div>
 		</header>
 	)
