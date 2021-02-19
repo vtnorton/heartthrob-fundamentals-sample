@@ -30,7 +30,7 @@
 
   <ItemGroup>
     <Reference Include="Heartthrob.Fundamentals.Core">
-      <HintPath>..\..\..\Heartthrob-Fundamentals\backend\Heartthrob.Fundamentals.Core\bin\Debug\net5.0\Heartthrob.Fundamentals.Core.dll</HintPath>
+      <HintPath>..\..\..\Heartthrob-Fundamentals\backend\src\Heartthrob.Fundamentals.Core\bin\Debug\net5.0\Heartthrob.Fundamentals.Core.dll</HintPath>
     </Reference>
   </ItemGroup>
 

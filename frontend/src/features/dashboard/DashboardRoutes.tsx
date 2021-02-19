@@ -1,1 +1,1 @@
-export default () => [{path: '/', component: () => <h1>Teste</h1>}]
+export default () => [{ path: '/', component: () => <h1>Teste</h1> }]

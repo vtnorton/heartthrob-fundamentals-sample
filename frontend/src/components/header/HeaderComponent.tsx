@@ -38,7 +38,8 @@ function constructAccountMenu(token: string) {
 	]
 
 	const decodedToken: any = jwt_decode(token) //TODO: criar interface para token
-	const name = decodedToken.unique_name[0]
+	console.log(decodedToken)
+	const name = decodedToken.unique_name[2]
 
 	const userProfile: IPersonaSharedProps = {
 		imageInitials: getIntials(name),
@@ -76,7 +77,9 @@ const HeaderComponent = ({ token }) => {
 	return (
 		<header className='acrylic header'>
 			<div className='logo'>
-				<img src='~/images/logo-white.png' alt='Logo da aplicação' />
+				<a href='/'>
+					<img src='~/images/logo-white.png' alt='Logo da aplicação' />
+				</a>
 			</div>
 			<div className='line'></div>
 			<div className='right'>

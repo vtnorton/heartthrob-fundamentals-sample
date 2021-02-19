@@ -1,5 +1,5 @@
 using Heartthrob.Fundamentals.Core;
-using Heartthrob.Fundamentals.Core.Models;
+using Heartthrob.Fundamentals.Core.Models.Entities;
 using HFundamentals.Sample.Data;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;

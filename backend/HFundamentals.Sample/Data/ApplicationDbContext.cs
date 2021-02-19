@@ -1,4 +1,4 @@
-﻿using Heartthrob.Fundamentals.Core.Models;
+﻿using Heartthrob.Fundamentals.Core.Models.Entities;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 
