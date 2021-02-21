@@ -1,7 +1,9 @@
 import { AccountState } from './account/AccountTypes'
+import { ProfileState } from './system/profile/ProfileTypes'
 
 export interface State {
 	account: AccountState
+	profile: ProfileState
 }
 
 export interface ApiWindow extends Window {

@@ -2,6 +2,8 @@ import 'heartthrob'
 import ProfileCard from './Cards/ProfileCard'
 import SecurityCard from './Cards/SecurityCard'
 
+import './ProfilePage.scss'
+
 const ProfilePage = () => {
 	return (
 		<div className='row'>

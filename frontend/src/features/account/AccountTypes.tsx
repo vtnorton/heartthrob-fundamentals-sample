@@ -14,7 +14,6 @@ export interface RegisterRequest {
 }
 
 export interface AccountState {
-	token: string
 	isLoading: boolean
 	errorMessage: string
 }

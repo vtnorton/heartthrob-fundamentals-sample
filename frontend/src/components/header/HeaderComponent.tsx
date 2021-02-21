@@ -4,25 +4,7 @@ import { Icon, Persona, IPersonaSharedProps } from '@fluentui/react'
 
 import { MenuItemType } from './HeaderComponentTypes'
 import './HeaderComponent.scss'
-
-function getIntials(value: string) {
-	value = removeSpecialCharacters(value)
-		.replace(/\W*(\w)\w*/g, '$1')
-		.toUpperCase()
-		.trim()
-	return value[0] + value[value.length - 1]
-}
-
-function removeSpecialCharacters(text: string) {
-	return text
-		.toLowerCase()
-		.replace(new RegExp('[ÁÀÂÃ]', 'gi'), 'a')
-		.replace(new RegExp('[ÉÈÊ]', 'gi'), 'e')
-		.replace(new RegExp('[ÍÌÎ]', 'gi'), 'i')
-		.replace(new RegExp('[ÓÒÔÕ]', 'gi'), 'o')
-		.replace(new RegExp('[ÚÙÛ]', 'gi'), 'u')
-		.replace(new RegExp('[Ç]', 'gi'), 'c')
-}
+import { getIntials } from '../../shared/utils'
 
 function signOut() {
 	localStorage.removeItem('token')
@@ -38,12 +20,12 @@ function constructAccountMenu(token: string) {
 	]
 
 	const decodedToken: any = jwt_decode(token) //TODO: criar interface para token
-	console.log(decodedToken)
 	const name = decodedToken.unique_name[2]
 
 	const userProfile: IPersonaSharedProps = {
 		imageInitials: getIntials(name),
 		text: name,
+		showInitialsUntilImageLoads: true,
 	}
 
 	const menuContent = (item: MenuItemType) => {

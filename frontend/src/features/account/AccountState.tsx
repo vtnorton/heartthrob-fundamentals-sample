@@ -2,7 +2,6 @@ import { createSlice, PayloadAction } from '@reduxjs/toolkit'
 import { AccountState, LoginRequest, RegisterRequest } from './AccountTypes'
 
 const initialState: AccountState = {
-	token: null,
 	isLoading: false,
 	errorMessage: '',
 }
