@@ -1,18 +1,21 @@
 import 'heartthrob'
-import { IIconProps, IPersonaSharedProps, Persona, PersonaSize, PrimaryButton } from '@fluentui/react'
+import { IIconProps, IPersonaSharedProps, Persona, PersonaSize, PrimaryButton, Panel, PanelType } from '@fluentui/react'
 import Card from 'heartthrob-react/src/components/Card'
 import Taskbar from 'heartthrob-react/src/components/Card/Taskbar/Taskbar'
 import { useDispatch, useSelector } from 'react-redux'
+import { useState } from 'react'
 
 import { selectProfileInfo } from '../ProfileSelectors'
 import { ProfileInfo } from '../ProfileTypes'
 import { getIntials } from '../../../../shared/utils'
 import { actions } from '../ProfileState'
+import React from 'react'
 
 const ProfileCard = () => {
 	const dispatch = useDispatch()
 	dispatch(actions.getProfileInfo())
 
+	const [isOpenedPanel, setOpenedPanel] = useState(false)
 	const profileInfo: ProfileInfo = useSelector(selectProfileInfo)
 
 	const profile: IPersonaSharedProps = {
@@ -23,9 +26,19 @@ const ProfileCard = () => {
 		showInitialsUntilImageLoads: true,
 	}
 
+	const changePanelState = () => {
+		setOpenedPanel(!isOpenedPanel)
+	}
+
 	const editProfile = () => {
 		const profileEditIcon: IIconProps = { iconName: 'EditContact' }
-		return <PrimaryButton text='Editar Perfil' iconProps={profileEditIcon} />
+		return <PrimaryButton text='Editar Perfil' iconProps={profileEditIcon} onClick={changePanelState} />
+	}
+
+	const notInformedTreatment = (text: string) => {
+		if (text === null || text === '' || text === undefined) return 'Não informado.'
+
+		return text
 	}
 
 	// TODO: Usar shimmer para mostrar os dados sendo carregados
@@ -40,7 +53,8 @@ const ProfileCard = () => {
 					<p>
 						<strong>Data de nascimento</strong>
 						<br />
-						{profileInfo.birthday}
+
+						{notInformedTreatment(profileInfo.birthday?.toISOString())}
 					</p>
 				</div>
 
@@ -48,11 +62,23 @@ const ProfileCard = () => {
 					<p>
 						<strong>Profissão</strong>
 						<br />
-						{profileInfo.jobTitle}
+						{notInformedTreatment(profileInfo.jobTitle)}
 					</p>
 				</div>
 			</div>
 			<Taskbar buttons={editProfile()} />
+
+			<Panel
+				isOpen={isOpenedPanel}
+				onDismiss={changePanelState}
+				headerText='Editar perfil'
+				closeButtonAriaLabel='Fechar'
+				type={PanelType.medium}
+				isFooterAtBottom={true}>
+				<p>Content goes here.</p>
+
+				<Taskbar buttons={editProfile()} />
+			</Panel>
 		</Card>
 	)
 }

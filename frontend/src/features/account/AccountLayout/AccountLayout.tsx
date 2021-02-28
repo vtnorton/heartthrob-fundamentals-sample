@@ -44,8 +44,12 @@ const AccountLayout = (props: Props) => {
 				{props.children}
 			</Card>
 
-			<footer className='account-footer'>
-				<ul>
+			<footer className='account-footer'></footer>
+		</section>
+	)
+}
+/*
+<ul>
 					<li>
 						<a href='/out/changelog'>©2018 HFundamentals @SystemInformation.GetSystemVersion()</a>
 					</li>
@@ -53,9 +57,5 @@ const AccountLayout = (props: Props) => {
 						<a href='/out/terms'>Termos e política de privacidade</a>
 					</li>
 				</ul>
-			</footer>
-		</section>
-	)
-}
-
+*/
 export default AccountLayout

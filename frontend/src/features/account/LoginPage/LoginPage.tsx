@@ -74,10 +74,10 @@ const LoginPage = () => {
 
 				<Checkbox name='rememberMe' label='Lembrar de mim' onChange={(e) => setRememberMe((e.target as HTMLInputElement).checked)} />
 
-				<Taskbar buttons={actionButtons()} leftButtons={leftButtons()}></Taskbar>
+				<Taskbar buttons={actionButtons()}></Taskbar>
 			</form>
 		</AccountLayout>
 	)
 }
-
+// TODO: Esqueci a senha <Taskbar buttons={actionButtons()} leftButtons={leftButtons()}></Taskbar>
 export default LoginPage

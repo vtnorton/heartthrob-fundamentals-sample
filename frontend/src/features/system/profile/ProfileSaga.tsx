@@ -7,7 +7,6 @@ export function* getProfileInfo() {
 	yield put(actions.isLoadingProfile(true))
 
 	try {
-		console.log('ahiehreih')
 		const response: Result = yield call(ProfileServices.GetProfile)
 		if (!response.succeeded) {
 			yield put(actions.setError({ message: response.errors[0] })) //TODO: função para mostrar todo o array
