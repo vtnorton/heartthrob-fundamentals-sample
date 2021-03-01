@@ -1,5 +1,5 @@
 import 'heartthrob'
-import { IIconProps, IPersonaSharedProps, Persona, PersonaSize, PrimaryButton, Panel, PanelType } from '@fluentui/react'
+import { IIconProps, IPersonaSharedProps, Persona, PersonaSize, PrimaryButton, Panel, PanelType, TextField, DatePicker } from '@fluentui/react'
 import Card from 'heartthrob-react/src/components/Card'
 import Taskbar from 'heartthrob-react/src/components/Card/Taskbar/Taskbar'
 import { useDispatch, useSelector } from 'react-redux'
@@ -33,6 +33,48 @@ const ProfileCard = () => {
 	const editProfile = () => {
 		const profileEditIcon: IIconProps = { iconName: 'EditContact' }
 		return <PrimaryButton text='Editar Perfil' iconProps={profileEditIcon} onClick={changePanelState} />
+	}
+
+	//TODO: fazer componente novo?
+	const editProfilePanelContent = () => {
+		const [firstName, setFirstName] = useState('')
+		const [lastName, setLastName] = useState('')
+
+		return (
+			<>
+				<div className='row'>
+					<div className='col-md-6 col-sm-6'>
+						<TextField name='firstName' label='Nome' placeholder='João' onChange={(e) => setFirstName((e.target as HTMLTextAreaElement).value)} />
+					</div>
+					<div className='col-md-6 col-sm-6'>
+						<TextField name='lastName' label='Sobrenome' placeholder='Silva' onChange={(e) => setLastName((e.target as HTMLTextAreaElement).value)} />
+					</div>
+				</div>
+				<div className='row'>
+					<div className='col-md-6 col-sm-6'>
+						<TextField
+							name='firstName'
+							label='Profissão'
+							placeholder='Advogado'
+							onChange={(e) => setFirstName((e.target as HTMLTextAreaElement).value)}
+						/>
+					</div>
+				</div>
+				<div className='row'>
+					<div className='col-md-6 col-sm-6'>
+						<DatePicker label='Data de nascimento' placeholder='30/03/2000' />
+					</div>
+				</div>
+			</>
+		)
+	}
+
+	const editProfilePanelTaskbar = () => {
+		const editProfilePanel = () => {
+			const profileEditIcon: IIconProps = { iconName: 'Save' }
+			return <PrimaryButton text='Salvar alterações' iconProps={profileEditIcon} onClick={changePanelState} />
+		}
+		return <Taskbar buttons={editProfilePanel()} />
 	}
 
 	const notInformedTreatment = (text: string) => {
@@ -74,10 +116,9 @@ const ProfileCard = () => {
 				headerText='Editar perfil'
 				closeButtonAriaLabel='Fechar'
 				type={PanelType.medium}
-				isFooterAtBottom={true}>
-				<p>Content goes here.</p>
-
-				<Taskbar buttons={editProfile()} />
+				isFooterAtBottom={true}
+				onRenderFooter={editProfilePanelTaskbar}>
+				{editProfilePanelContent()}
 			</Panel>
 		</Card>
 	)
