@@ -1,5 +1,4 @@
 {
-	"parser": "@typescript-eslint/parser",
 	"env": {
 		"commonjs": true,
 		"es6": true,
@@ -7,12 +6,13 @@
 		"jest": true
 	},
 	"extends": [
+		"eslint:recommended",
+		"plugin:@typescript-eslint/eslint-recommended",
 		"plugin:@typescript-eslint/recommended",
 		"prettier/@typescript-eslint",
-		"plugin:editorconfig/noconflict",
-		"plugin:prettier/recommended",
-		"prettier/react"
+		"plugin:prettier/recommended"
 	],
+	"parser": "@typescript-eslint/parser",
 	"plugins": ["prettier", "editorconfig", "@typescript-eslint", "react"],
 	"parserOptions": {
 		"ecmaVersion": 2020,

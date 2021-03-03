@@ -1,0 +1,10 @@
+{
+	"editor.defaultFormatter": "rvest.vs-code-prettier-eslint",
+	"typescript.tsdk": "node_modules/typescript/lib",
+	"editor.codeActionsOnSave": {
+		"source.fixAll.eslint": true
+	},
+	"[typescriptreact]": {
+		"editor.defaultFormatter": "esbenp.prettier-vscode"
+	}
+}

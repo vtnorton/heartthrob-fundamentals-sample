@@ -9,7 +9,7 @@
 		"resolveJsonModule": true,
 		"skipLibCheck": true,
 		"sourceMap": true,
-		"target": "es5"
+		"target": "ES5"
 	},
 	"include": ["./src/**/*", "test.js"]
 }
