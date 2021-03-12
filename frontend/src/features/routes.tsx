@@ -1,13 +1,10 @@
-import React from 'react'
 import { ConnectedRouter } from 'connected-react-router'
-import { Redirect, Route, Switch } from 'react-router-dom'
-import { initializeIcons } from '@fluentui/react'
-import { MenuItemType, HeaderComponent } from 'heartthrob-react'
-
+import { Redirect, Route, Switch } from 'react-router'
 import { history } from '../init-redux'
+
+import Header from '../components/HeaderComponent/HeaderComponent'
 import AccountRoutes from './account/AccountRoutes'
 import DashboardRoutes from './dashboard/DashboardRoutes'
-import './index.scss'
 import SystemRoutes from './system/SystemRoutes'
 
 const token: string = localStorage.getItem('token')
@@ -15,21 +12,7 @@ const publicRoutes = [].concat(AccountRoutes())
 const privateRoutes = [].concat(SystemRoutes(), DashboardRoutes())
 
 export default () => {
-	initializeIcons()
 	const isAuthenticated = () => token !== null
-
-	const accountMenu: MenuItemType[] = [
-		{ icon: { iconName: 'UserOptional' }, name: 'Gerenciar conta', location: '/manage/profile' },
-		// { icon: manageProfileIcon, name: 'Enviar feedbacks', location: '/manage/feedback/send' },
-		//	{ icon: manageProfileIcon, name: 'Feedbacks', location: '/manage/feedback' },
-		{ icon: { iconName: 'SignOut' }, name: 'Sair', action: signOut },
-	]
-
-	function signOut() {
-		localStorage.removeItem('token')
-		window.location.href = '/account/login'
-	}
-
 	const PrivateRoute = ({ component: Component, ...rest }) => (
 		<Route
 			{...rest}
@@ -37,7 +20,7 @@ export default () => {
 				if (isAuthenticated())
 					return (
 						<>
-							<HeaderComponent token={token} accountMenu={accountMenu} />
+							<Header />
 							<div className='content'>
 								<Component {...props} />
 							</div>

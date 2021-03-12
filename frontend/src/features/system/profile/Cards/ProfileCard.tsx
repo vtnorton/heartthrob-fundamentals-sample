@@ -1,15 +1,14 @@
 import 'heartthrob'
 import { IIconProps, IPersonaSharedProps, Persona, PersonaSize, PrimaryButton, Panel, PanelType, TextField, DatePicker } from '@fluentui/react'
 import Card from 'heartthrob-react/src/components/Card'
+import { getIntials } from 'heartthrob-react'
 import Taskbar from 'heartthrob-react/src/components/Card/Taskbar/Taskbar'
 import { useDispatch, useSelector } from 'react-redux'
 import { useState } from 'react'
 
 import { selectProfileInfo } from '../ProfileSelectors'
 import { ProfileInfo } from '../ProfileTypes'
-import { getIntials } from '../../../../shared/utils'
 import { actions } from '../ProfileState'
-import React from 'react'
 
 const ProfileCard = () => {
 	const dispatch = useDispatch()
