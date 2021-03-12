@@ -1,6 +1,5 @@
 import 'heartthrob'
-import Card from 'heartthrob-react'
-import React from 'react'
+import Card from 'heartthrob-react/src/components/Card/index'
 import { useDispatch, useSelector } from 'react-redux'
 import { MessageBar, MessageBarType } from '@fluentui/react'
 
@@ -39,7 +38,9 @@ const AccountLayout = (props: Props) => {
 	return (
 		<section className='account'>
 			<Card acrylic={true}>
-				<div className='logo'>HFundamentals.Sample</div>
+				<div className='logo'>
+					<h1>HFundamentals.Sample</h1>
+				</div>
 				<hr />
 				{props.children}
 			</Card>

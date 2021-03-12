@@ -12,7 +12,7 @@ const publicRoutes = [].concat(AccountRoutes())
 const privateRoutes = [].concat(SystemRoutes(), DashboardRoutes())
 
 export default () => {
-	const isAuthenticated = () => token !== null
+	const isAuthenticated = () => token !== undefined
 	const PrivateRoute = ({ component: Component, ...rest }) => (
 		<Route
 			{...rest}
