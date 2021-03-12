@@ -5,11 +5,17 @@
   "extends": [
     "eslint:recommended",
     "plugin:@typescript-eslint/eslint-recommended",
-    "plugin:@typescript-eslint/recommended"
+    "plugin:@typescript-eslint/recommended",
+		"plugin:react/recommended"
   ],
   "env": {
     "browser": true,
     "es6": true
+  },
+	"settings": {
+    "react": {
+      "version": "17"
+    }
   },
   "rules": {
     "@typescript-eslint/consistent-type-definitions": ["error", "interface"],
@@ -21,6 +27,8 @@
 		"react/react-in-jsx-scope": [0],
 		"react/prop-types": [0],
 		"react/jsx-indent": [0],
+		"react/jsx-closing-bracket-location": ["error",  {"selfClosing": "after-props", "nonEmpty": "after-props"}],
+		"jsx-quotes": ["error", "prefer-single"],
 		"newline-per-chained-call": ["error", { "ignoreChainWithDepth": 2 }],
 		"no-console": "off",
 		"comma-dangle": ["error", "always-multiline"],
@@ -31,6 +39,7 @@
 		"no-use-before-define": "off",
 		"max-len": "off",
 		"semi": ["error", "never"],
-		"nonblock-statement-body-position": ["error", "below"]
+		"nonblock-statement-body-position": ["error", "below"],
+		"quotes": ["error", "single"]
   }
 }

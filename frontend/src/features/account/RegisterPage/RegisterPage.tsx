@@ -114,7 +114,8 @@ const RegisterPage = () => {
 
 	const checkPassword = (doesPasswordMatch: boolean) => {
 		const isStrong = checkPasswordStrength(password, '#password-check')
-		if (confirmPassword !== '') setIsAbleToRegister(!(isStrong && doesPasswordMatch))
+		if (confirmPassword !== '') 
+setIsAbleToRegister(!(isStrong && doesPasswordMatch))
 	}
 
 	const actionButtons = () => {

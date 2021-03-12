@@ -15,7 +15,9 @@ const runContextSaga = async (saga: any) => {
 
 /* eslint-disable import/prefer-default-export */
 export const runSagaTest = async (saga: any, fetchPromise?: Promise<any>) => {
-  if (fetchPromise) mockFetch(fetchPromise)
-  else mockFetch()
+  if (fetchPromise) 
+mockFetch(fetchPromise)
+  else 
+mockFetch()
   return runContextSaga(saga)
 }

@@ -3,7 +3,7 @@ const apis = {
 }
 
 export const mockFetch = (fetchMock: Promise<any> = Promise.resolve()) => {
-  ;(window as any).apis = apis
+  (window as any).apis = apis
   const fetch = jest.fn(() => fetchMock)
   ;(window as any).fetch = fetch
   return fetch

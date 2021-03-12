@@ -77,7 +77,8 @@ const ProfileCard = () => {
 	}
 
 	const notInformedTreatment = (text: string) => {
-		if (text === null || text === '' || text === undefined) return 'Não informado.'
+		if (text === null || text === '' || text === undefined) 
+return 'Não informado.'
 
 		return text
 	}
