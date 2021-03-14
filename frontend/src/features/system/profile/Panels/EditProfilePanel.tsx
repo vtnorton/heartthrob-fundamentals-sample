@@ -11,8 +11,8 @@ interface PropsEditProfilePanel {
 
 
 const EditProfilePanel = (props: PropsEditProfilePanel) => {
-	const [firstName, setFirstName] = useState(props.profile.fullName)
-	const [lastName, setLastName] = useState(props.profile.fullName)
+	const [firstName, setFirstName] = useState(props.profile.firstName)
+	const [lastName, setLastName] = useState(props.profile.lastName)
 
 	const panelTaskbar = () => {
 
@@ -23,22 +23,23 @@ const EditProfilePanel = (props: PropsEditProfilePanel) => {
 
 		return <Taskbar buttons={editProfilePanel()} />
 	}
-
+	
 	const panelContent = () => {
 		return (
 			<>
 				<div className='row'>
 					<div className='col-md-6 col-sm-6'>
-						<TextField name='firstName' label='Nome' placeholder='João' onChange={(e) => setFirstName((e.target as HTMLTextAreaElement).value)} />
+						<TextField name='firstName' value={props.profile.firstName} label='Nome' placeholder='João' onChange={(e) => setFirstName((e.target as HTMLTextAreaElement).value)} />
 					</div>
 					<div className='col-md-6 col-sm-6'>
-						<TextField name='lastName' label='Sobrenome' placeholder='Silva' onChange={(e) => setLastName((e.target as HTMLTextAreaElement).value)} />
+						<TextField name='lastName' value={props.profile.lastName} label='Sobrenome' placeholder='Silva' onChange={(e) => setLastName((e.target as HTMLTextAreaElement).value)} />
 					</div>
 				</div>
 				<div className='row'>
 					<div className='col-md-6 col-sm-6'>
 						<TextField
 							name='firstName'
+							value={props.profile.jobTitle}
 							label='Profissão'
 							placeholder='Advogado'
 							onChange={(e) => setFirstName((e.target as HTMLTextAreaElement).value)}/>
@@ -46,7 +47,7 @@ const EditProfilePanel = (props: PropsEditProfilePanel) => {
 				</div>
 				<div className='row'>
 					<div className='col-md-6 col-sm-6'>
-						<DatePicker label='Data de nascimento' placeholder='30/03/2000' />
+						<DatePicker value={props.profile.birthday} label='Data de nascimento' placeholder='30/03/2000' />
 					</div>
 				</div>
 			</>

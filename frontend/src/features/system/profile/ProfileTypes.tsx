@@ -5,7 +5,9 @@ export interface ProfileInfo {
 	email: string
 	phoneNumber?: string
 	userName: string
-	jobTitle?: string
+	jobTitle?: string,
+	firstName: string,
+	lastName: string
 }
 
 export interface ProfileState {

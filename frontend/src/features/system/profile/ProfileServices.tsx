@@ -8,10 +8,9 @@ export default {
 		headers.append('Content-Type', 'application/json') //TODO: passar para o arquivo fetch.ts
 		headers.append('Authorization', 'Bearer ' + localStorage.getItem('token'))
 
-		let result: Result
 		const endpoint = `${window.apis.heartthrob}ManageAccount/Profile`
 
-		result = await fetch(endpoint, { method: 'get', headers: headers }).then((response) => {
+		const result = await fetch(endpoint, { method: 'get', headers: headers }).then((response) => {
 			return response.json()
 		})
 
