@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/explicit-module-boundary-types */
 import { call, put, takeEvery } from 'redux-saga/effects'
 import { Result } from '../../types'
 import ProfileServices from './ProfileServices'
@@ -12,7 +13,7 @@ export function* getProfileInfo() {
 			yield put(actions.setError({ message: response.errors[0] })) //TODO: função para mostrar todo o array
 			yield put(actions.isLoadingProfile(false))
 		} else {
-			yield call(actions.setProfileInfo, response.value)
+			yield put(actions.setProfileInfo(response.value))
 		}
 	} catch (error) {
 		yield call(console.error, 'Houve um erro ao entrar em contato com a API: ', error)

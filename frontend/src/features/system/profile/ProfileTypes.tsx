@@ -3,13 +3,14 @@ export interface ProfileInfo {
 	fullName: string
 	birthday?: Date
 	email: string
-	phoneNumber: string
+	phoneNumber?: string
 	userName: string
-	jobTitle: string
+	jobTitle?: string
 }
 
 export interface ProfileState {
-	isLoadingProfile: boolean
+	isLoadingProfile: boolean,
+	isEditProfilePanelOpen: boolean,
 	profile: ProfileInfo
 	errorMessage: string
 }

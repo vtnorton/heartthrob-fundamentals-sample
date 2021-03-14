@@ -4,13 +4,13 @@ import SecurityCard from './Cards/SecurityCard'
 
 import './ProfilePage.scss'
 
-const ProfilePage = () => {
+const ProfilePage = (): JSX.Element => {
 	return (
 		<div className='row'>
-			<div className='col-lg-5 col-md-6'>
+			<div className='col-lg-6'>
 				<ProfileCard />
 			</div>
-			<div className='col-lg-4 col-md-5'>
+			<div className='col-lg-5'>
 				<SecurityCard />
 			</div>
 		</div>

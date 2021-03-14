@@ -107,5 +107,4 @@ const LoginPage = (): JSX.Element => {
 		</AccountLayout>
 	)
 }
-// TODO: Esqueci a senha <Taskbar buttons={actionButtons()} leftButtons={leftButtons()}></Taskbar>
 export default LoginPage

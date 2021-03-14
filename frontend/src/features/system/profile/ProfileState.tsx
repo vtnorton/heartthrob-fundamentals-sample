@@ -3,12 +3,13 @@ import { ProfileInfo, ProfileState } from './ProfileTypes'
 
 const initialState: ProfileState = {
 	isLoadingProfile: false,
+	isEditProfilePanelOpen: false,
 	profile: {
-		fullName: 'xae',
-		email: 'xae',
-		phoneNumber: 'aeuhee',
-		jobTitle: 'ajfoe',
-		userName: 'huuse',
+		fullName: '',
+		email: '',
+		phoneNumber: '',
+		jobTitle: '',
+		userName: '',
 	},
 	errorMessage: '',
 }
@@ -23,13 +24,18 @@ const setError = (state: ProfileState, action: PayloadAction<{ message: string }
 	errorMessage: action.payload.message,
 })
 
-const getProfileInfo = (state) => state
+const getProfileInfo = (state: ProfileState) => {
+	return {
+		...state,
+		isLoadingProfile: true,
+	}
+}
 
 const setProfileInfo = (state: ProfileState, action: PayloadAction<ProfileInfo>) => {
-	console.log('xs', action.payload)
 	return {
 		...state,
 		profile: action.payload,
+		isLoadingProfile: false,
 	}
 }
 
