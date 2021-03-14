@@ -35,7 +35,7 @@ const getProfileInfo = (state: ProfileState) => {
 
 const setProfileInfo = (state: ProfileState, action: PayloadAction<ProfileInfo>) => {
 
-	if(action.payload.birthday.toISOString() === '0001-01-01T00:00:00')
+	if(`${action.payload.birthday}` === '0001-01-01T00:00:00')
 		action.payload.birthday = undefined
 		
 	return {

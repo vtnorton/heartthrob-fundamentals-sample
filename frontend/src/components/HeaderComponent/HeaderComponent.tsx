@@ -21,7 +21,7 @@ const HeaderComponent = (): JSX.Element => {
 		token: token,
 		accountMenu: accountMenu,
 	}
-
+	
 	return <Header props={headerOptions} />
 }
 
