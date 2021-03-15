@@ -1,5 +1,5 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit'
-import { ProfileInfo, ProfileState } from './ProfileTypes'
+import { EditProfileRequest, ProfileInfo, ProfileState } from './ProfileTypes'
 
 const initialState: ProfileState = {
 	isLoadingProfile: false,
@@ -33,8 +33,11 @@ const getProfileInfo = (state: ProfileState) => {
 	}
 }
 
-const setProfileInfo = (state: ProfileState, action: PayloadAction<ProfileInfo>) => {
+const postProfileInfo = (state: ProfileState, action: PayloadAction<EditProfileRequest>) => ({
+	...state,
+})
 
+const setProfileInfo = (state: ProfileState, action: PayloadAction<ProfileInfo>) => {
 	if(`${action.payload.birthday}` === '0001-01-01T00:00:00')
 		action.payload.birthday = undefined
 		
@@ -59,6 +62,7 @@ const slice = createSlice({
 		setError,
 		getProfileInfo,
 		setProfileInfo,
+		postProfileInfo,
 	},
 })
 

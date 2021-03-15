@@ -10,6 +10,14 @@ export interface ProfileInfo {
 	lastName: string
 }
 
+export interface EditProfileRequest {
+	birthday?: Date
+	userName: string
+	jobTitle?: string,
+	firstName: string,
+	lastName: string
+}
+
 export interface ProfileState {
 	isLoadingProfile: boolean,
 	isEditProfilePanelOpen: boolean,
