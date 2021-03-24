@@ -21,6 +21,7 @@ export interface EditProfileRequest {
 export interface ProfileState {
 	isLoadingProfile: boolean,
 	isEditProfilePanelOpen: boolean,
+	isEditProfileLoading: boolean,
 	profile: ProfileInfo
 	errorMessage: string
 }

@@ -6,7 +6,7 @@ import Taskbar from 'heartthrob-react/src/components/Card/Taskbar/Taskbar'
 import { useDispatch, useSelector } from 'react-redux'
 import { useEffect, useState } from 'react'
 
-import { selectIsLoadingProfile, selectProfileInfo } from '../ProfileSelectors'
+import { selectProfileInfo } from '../ProfileSelectors'
 import { ProfileInfo } from '../ProfileTypes'
 import { actions } from '../ProfileState'
 import EditProfilePanel from '../Panels/EditProfilePanel'
@@ -15,7 +15,6 @@ const ProfileCard = () => {
 	const dispatch = useDispatch()
 	const [isOpenedPanel, setOpenedPanel] = useState(false)
 	const profileInfo: ProfileInfo = useSelector(selectProfileInfo)
-	const isLoadingProfile: boolean = useSelector(selectIsLoadingProfile)
 
 	const profile: IPersonaSharedProps = {
 		imageInitials: getIntials(profileInfo.fullName),
@@ -34,13 +33,19 @@ const ProfileCard = () => {
 		return <PrimaryButton text='Editar Perfil' iconProps={profileEditIcon} onClick={changePanelState} />
 	}
 
-	const notInformedTreatment = (text): string => {
-		if (text === null || text === '' || text === undefined || text === '0001-01-01T00:00:00') 
+	const notInformedTextTreatment = (text: string): string => {
+		if (text === null || text === '' || text === undefined) 
 			return 'Não informado.'
-
+		
 		return text
 	}
-
+		
+	const notInformedDateTreatment = (date: Date): string => {
+		if(date === undefined || date.toString() === '0001-01-01T00:00:00' )
+			return 'Não informado.'
+			
+		return new Date(date).toLocaleDateString()
+	}
 	
 	useEffect(() => {
 		dispatch(actions.getProfileInfo())
@@ -61,8 +66,7 @@ const ProfileCard = () => {
 					<p>
 						<strong>Data de nascimento</strong>
 						<br />
-
-						{notInformedTreatment(profileInfo.birthday)}
+						{notInformedDateTreatment(profileInfo.birthday)}
 					</p>
 				</div>
 
@@ -70,7 +74,7 @@ const ProfileCard = () => {
 					<p>
 						<strong>Profissão</strong>
 						<br />
-						{notInformedTreatment(profileInfo.jobTitle)}
+						{notInformedTextTreatment(profileInfo.jobTitle)}
 					</p>
 				</div>
 			</div>

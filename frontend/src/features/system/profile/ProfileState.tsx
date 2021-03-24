@@ -4,6 +4,7 @@ import { EditProfileRequest, ProfileInfo, ProfileState } from './ProfileTypes'
 const initialState: ProfileState = {
 	isLoadingProfile: false,
 	isEditProfilePanelOpen: false,
+	isEditProfileLoading: false,
 	profile: {
 		fullName: '',
 		email: '',
@@ -35,6 +36,7 @@ const getProfileInfo = (state: ProfileState) => {
 
 const postProfileInfo = (state: ProfileState, action: PayloadAction<EditProfileRequest>) => ({
 	...state,
+	isEditProfileLoading: true,
 })
 
 const setProfileInfo = (state: ProfileState, action: PayloadAction<ProfileInfo>) => {
@@ -45,6 +47,8 @@ const setProfileInfo = (state: ProfileState, action: PayloadAction<ProfileInfo>)
 		...state,
 		profile: action.payload,
 		isLoadingProfile: false,
+		isEditProfileLoading: false,
+		isEditProfilePanelOpen: false,
 	}
 }
 

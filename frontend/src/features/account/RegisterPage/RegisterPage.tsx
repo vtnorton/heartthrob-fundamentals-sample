@@ -3,13 +3,14 @@ import React, { FormEvent, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { useHistory } from 'react-router-dom'
 import Taskbar from 'heartthrob-react/src/components/Card/Taskbar/Taskbar'
-import { DefaultButton, IIconProps, PrimaryButton, Spinner, SpinnerSize, TextField } from '@fluentui/react'
+import { DefaultButton, IIconProps, TextField } from '@fluentui/react'
 
 import AccountLayout, { showError } from '../AccountLayout/AccountLayout'
 import { selectIsLoading } from '../AccountSelectors'
 import { RegisterRequest } from '../AccountTypes'
 import './RegisterPage.scss'
 import { actions } from '../AccountState'
+import LoadButtonComponent from '../../../components/LoadButtonComponent/LoadButtonComponent'
 
 const RegisterPage = () => {
 	const history = useHistory()
@@ -38,7 +39,7 @@ const RegisterPage = () => {
 	}
 
 	// TODO: levar para o heartthrob
-	const checkPasswordStrength = (password: string, output: string) => {
+	const checkPasswordStrength = (typedPassword: string, output: string) => {
 		let message: string
 		let capsCount: number, smallCount: number, numberCount: number, symbolCount: number
 
@@ -50,14 +51,14 @@ const RegisterPage = () => {
 		infoBox.classList.remove('weak')
 		infoBox.classList.remove('medium')
 
-		if (password.length < 8) {
+		if (typedPassword.length < 8) {
 			infoBox.classList.add('short')
 			infoBox.innerHTML = 'A senha necessita ter pelo menos 8 caracteres.'
 		} else {
-			capsCount = (password.match(/[A-Z]/g) || []).length
-			smallCount = (password.match(/[a-z]/g) || []).length
-			numberCount = (password.match(/[0-9]/g) || []).length
-			symbolCount = (password.match(/\W/g) || []).length
+			capsCount = (typedPassword.match(/[A-Z]/g) || []).length
+			smallCount = (typedPassword.match(/[a-z]/g) || []).length
+			numberCount = (typedPassword.match(/[0-9]/g) || []).length
+			symbolCount = (typedPassword.match(/\W/g) || []).length
 
 			if (capsCount < 1) {
 				infoBox.classList.add('weak')
@@ -83,11 +84,11 @@ const RegisterPage = () => {
 	}
 
 	// TODO: levar para o heartthrob
-	const checkPasswordMatch = (password: string, confirmPassword: string, output: string) => {
+	const checkPasswordMatch = (typedPassword: string, typedConfirmPassword: string, output: string) => {
 		const infoBox = document.querySelector(output)
 		infoBox.classList.add('validator')
 
-		if (password !== confirmPassword) {
+		if (typedPassword !== typedConfirmPassword) {
 			infoBox.classList.remove('strong')
 			infoBox.innerHTML = 'As senhas estão diferentes, por favor, tente novamente.'
 		} else {
@@ -105,6 +106,12 @@ const RegisterPage = () => {
 		checkPasswordStrength(value, '#password-check')
 	}
 
+	const checkPassword = (doesPasswordMatch: boolean) => {
+		const isStrong = checkPasswordStrength(password, '#password-check')
+		if (confirmPassword !== '') 
+			setIsAbleToRegister(!(isStrong && doesPasswordMatch))
+	}
+
 	const onConfirmPasswordChange = (element: FormEvent<HTMLTextAreaElement>) => {
 		const value = (element.target as HTMLTextAreaElement).value
 		const doesPasswordMatch = checkPasswordMatch(password, value, '#password-match')
@@ -112,26 +119,19 @@ const RegisterPage = () => {
 		checkPassword(doesPasswordMatch)
 	}
 
-	const checkPassword = (doesPasswordMatch: boolean) => {
-		const isStrong = checkPasswordStrength(password, '#password-check')
-		if (confirmPassword !== '') 
-setIsAbleToRegister(!(isStrong && doesPasswordMatch))
-	}
-
 	const actionButtons = () => {
 		const isLoading = useSelector(selectIsLoading)
 		const registerIcon: IIconProps = { iconName: 'PeopleAdd' }
 		const loginIcon: IIconProps = { iconName: 'Permissions' }
 
-		if (isLoading) {
-			return <Spinner size={SpinnerSize.medium} label='Registrando novo usuário' ariaLive='assertive' labelPosition='right' />
-		}
 
 		return (
-			<>
-				<DefaultButton text='Entrar' onClick={goToLogin} iconProps={loginIcon} />
-				<PrimaryButton text='Registrar' disabled={isAbleToRegister} onClick={doRegister} iconProps={registerIcon} />
-			</>
+			<LoadButtonComponent loadingText='Registrando' iconProps={registerIcon} disabled={isAbleToRegister} text='Registrar' onClick={doRegister} isLoading={isLoading} >
+				<DefaultButton
+					text='Entrar'
+					onClick={goToLogin}
+					iconProps={loginIcon}/>
+			</LoadButtonComponent>
 		)
 	}
 
@@ -156,8 +156,7 @@ setIsAbleToRegister(!(isStrong && doesPasswordMatch))
 							name='email'
 							label='E-mail'
 							placeholder='seuemail@empresa.com'
-							onChange={(e) => setEmail((e.target as HTMLTextAreaElement).value)}
-						/>
+							onChange={(e) => setEmail((e.target as HTMLTextAreaElement).value)}/>
 					</div>
 				</div>
 

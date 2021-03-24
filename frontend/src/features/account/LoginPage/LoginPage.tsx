@@ -7,9 +7,6 @@ import {
 	Checkbox,
 	DefaultButton,
 	IIconProps,
-	PrimaryButton,
-	Spinner,
-	SpinnerSize,
 	TextField,
 } from '@fluentui/react'
 
@@ -18,6 +15,7 @@ import { LoginRequest } from '../AccountTypes'
 import { actions } from '../AccountState'
 import { selectIsLoading } from '../AccountSelectors'
 import { useHistory } from 'react-router-dom'
+import LoadButtonComponent from '../../../components/LoadButtonComponent/LoadButtonComponent'
 
 const LoginPage = (): JSX.Element => {
 	const history = useHistory()
@@ -49,27 +47,17 @@ const LoginPage = (): JSX.Element => {
 
 	const actionButtons = () => {
 		const isLoading = useSelector(selectIsLoading)
-		const registerIcon: IIconProps = { iconName: 'PeopleAdd' }
 		const loginIcon: IIconProps = { iconName: 'Permissions' }
-
-		if (isLoading) {
-			return (
-				<Spinner
-					size={SpinnerSize.medium}
-					label='Entrando'
-					ariaLive='assertive'
-					labelPosition='right'/>
-			)
-		}
-
+		const registerIcon: IIconProps = { iconName: 'PeopleAdd' }
+			
 		return (
-			<>
+			<LoadButtonComponent loadingText='Entrando' iconProps={loginIcon} text='Entrar' onClick={doLogin} isLoading={isLoading} >
 				<DefaultButton
 					text='Registrar'
 					onClick={goToRegister}
 					iconProps={registerIcon}/>
-				<PrimaryButton text='Entrar' onClick={doLogin} iconProps={loginIcon} />
-			</>
+			
+			</LoadButtonComponent>
 		)
 	}
 

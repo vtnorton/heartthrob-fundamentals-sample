@@ -3,7 +3,9 @@ import { TextField, DatePicker, PrimaryButton, IIconProps, Panel, PanelType } fr
 import Taskbar from 'heartthrob-react/src/components/Card/Taskbar/Taskbar'
 import { EditProfileRequest, ProfileInfo } from '../ProfileTypes'
 import { actions } from '../ProfileState'
-import { useDispatch } from 'react-redux'
+import { useDispatch, useSelector } from 'react-redux'
+import LoadButtonComponent from '../../../../components/LoadButtonComponent/LoadButtonComponent'
+import { selectIsLoadingEditProfile } from '../ProfileSelectors'
 
 interface PropsEditProfilePanel {
 	isOpenedPanel: boolean,
@@ -12,6 +14,8 @@ interface PropsEditProfilePanel {
 }
 
 const EditProfilePanel = (props: PropsEditProfilePanel) => {
+	const isLoading = useSelector(selectIsLoadingEditProfile)
+
 	const [firstName, setFirstName] = useState(props.profile.firstName)
 	const [lastName, setLastName] = useState(props.profile.lastName)
 	const [jobTitle, setJobTitle] = useState(props.profile.jobTitle)
@@ -31,10 +35,9 @@ const EditProfilePanel = (props: PropsEditProfilePanel) => {
 	}
 
 	const panelTaskbar = () => {
-
 		const editProfilePanel = () => {
 			const profileEditIcon: IIconProps = { iconName: 'Save' }
-			return <PrimaryButton text='Salvar alterações' iconProps={profileEditIcon} onClick={editProfile} />
+			return <LoadButtonComponent loadingText='Salvando informações' isLoading={isLoading} text='Salvar alterações' iconProps={profileEditIcon} onClick={editProfile} />
 		}
 
 		return <Taskbar buttons={editProfilePanel()} />
