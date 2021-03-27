@@ -1,0 +1,51 @@
+trigger:
+  - develop
+  - main
+
+pool:
+  vmImage: ubuntu-latest
+
+variables:
+  buildConfiguration: "Release"
+
+stages:
+  - stage: build
+    displayName: Build frontend
+    jobs:
+      - job: frontend
+        steps:
+          - task: NodeTool@0
+            inputs:
+              versionSpec: "10.x"
+            displayName: "Install Node.js"
+
+          - script: npm install
+            displayName: "npm install"
+            workingDirectory: "$(Build.ArtifactStagingDirectory)/frontend/"
+
+          - script: build
+            displayName: "npm run build"
+            workingDirectory: "$(Build.ArtifactStagingDirectory)/frontend/"
+
+          - script: test
+            displayName: "npm run test"
+            workingDirectory: "$(Build.ArtifactStagingDirectory)/frontend/"
+
+  - stage: release
+    displayName: Deploy
+    condition: and(succeeded(), eq(variables['Build.SourceBranch'], 'refs/heads/develop'))
+    jobs:
+      - deployment: deploy_frontend_beta
+        displayName: Deploy frontend (beta)
+        environment: beta_env
+        strategy:
+          runOnce:
+            deploy:
+              steps:
+                - task: AzureFileCopy@4
+                  inputs:
+                    SourcePath: "$(Build.ArtifactStagingDirectory)/frontend/dist"
+                    azureSubscription: "Visual Studio Enterprise(66617915-b071-43f5-b408-ccfcf9c4ab1e)"
+                    Destination: "AzureBlob"
+                    storage: "lugusbeta"
+                    ContainerName: "$web"
