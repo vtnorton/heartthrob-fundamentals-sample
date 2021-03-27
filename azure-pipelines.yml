@@ -3,7 +3,7 @@ trigger:
   - main
 
 pool:
-  vmImage: ubuntu-latest
+  vmImage: windows-latest
 
 variables:
   buildConfiguration: "Release"
@@ -21,15 +21,21 @@ stages:
 
           - script: npm install
             displayName: "npm install"
-            workingDirectory: "$(Build.ArtifactStagingDirectory)/frontend/"
+            workingDirectory: "$(System.DefaultWorkingDirectory)/frontend/"
 
-          - script: build
-            displayName: "npm run build"
-            workingDirectory: "$(Build.ArtifactStagingDirectory)/frontend/"
+          - script: npm run build
+            displayName: "build"
+            workingDirectory: "$(System.DefaultWorkingDirectory)/frontend/"
 
-          - script: test
-            displayName: "npm run test"
-            workingDirectory: "$(Build.ArtifactStagingDirectory)/frontend/"
+          - script: npm run test
+            displayName: "test"
+            workingDirectory: "$(System.DefaultWorkingDirectory)/frontend/"
+
+          - task: PublishBuildArtifacts@1
+            inputs:
+              PathtoPublish: "$(System.DefaultWorkingDirectory)/frontend/dist/"
+              ArtifactName: "frontend"
+              publishLocation: "Container"
 
   - stage: release
     displayName: Deploy
@@ -42,10 +48,16 @@ stages:
           runOnce:
             deploy:
               steps:
+                - task: DownloadBuildArtifacts@0
+                  inputs:
+                    buildType: "current"
+                    downloadType: "single"
+                    artifactName: "frontend"
+                    downloadPath: "$(System.ArtifactsDirectory)"
                 - task: AzureFileCopy@4
                   inputs:
-                    SourcePath: "$(Build.ArtifactStagingDirectory)/frontend/dist"
+                    SourcePath: "$(System.ArtifactsDirectory)/frontend"
                     azureSubscription: "Visual Studio Enterprise(66617915-b071-43f5-b408-ccfcf9c4ab1e)"
                     Destination: "AzureBlob"
-                    storage: "lugusbeta"
+                    storage: "$(betaStorage)"
                     ContainerName: "$web"
