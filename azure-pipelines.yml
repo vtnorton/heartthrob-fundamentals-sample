@@ -84,11 +84,11 @@ stages:
                     downloadPath: '$(System.ArtifactsDirectory)'
                 - task: AzureFileCopy@2
                   inputs:
-                    SourcePath: "$(System.ArtifactsDirectory)/frontend"
-                    azureSubscription: "Visual Studio Enterprise(66617915-b071-43f5-b408-ccfcf9c4ab1e)"
-                    Destination: "AzureBlob"
-                    storage: "$(betaStorage)"
-                    ContainerName: "$web"
+                    SourcePath: '$(System.ArtifactsDirectory)/frontend'
+                    azureSubscription: 'Visual Studio Enterprise (66617915-b071-43f5-b408-ccfcf9c4ab1e)'
+                    Destination: 'AzureBlob'
+                    storage: '$(betaStorage)'
+                    ContainerName: '$web'
 
       - deployment: deploy_backend_beta
         displayName: "Deploy backend (beta)"
