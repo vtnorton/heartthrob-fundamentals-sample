@@ -13,6 +13,7 @@ stages:
     displayName: Build
     jobs:
       - job: frontend
+        dependsOn: backend
         displayName: "Build frontend"
         steps:
           - task: NodeTool@0
@@ -75,6 +76,7 @@ stages:
       - deployment: deploy_frontend_beta
         displayName: "Deploy frontend (beta)"
         environment: beta_env
+        dependsOn: beta_env_back
         strategy:
           runOnce:
             deploy:

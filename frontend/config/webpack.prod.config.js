@@ -3,7 +3,7 @@ const dotenv = require('dotenv-webpack')
 
 const MiniCssExtractPlugin = require('mini-css-extract-plugin')
 const OptimizeCssAssetsPlugin = require('optimize-css-assets-webpack-plugin')
-const UglifyJsPlugin = require('uglifyjs-webpack-plugin')
+const TerserPlugin = require('terser-webpack-plugin')
 
 const baseConfig = require('./webpack.base.config')
 
@@ -22,7 +22,7 @@ const prodConfig = () => {
 						},
 					},
 				},
-				minimizer: [new UglifyJsPlugin()],
+				minimizer: [new TerserPlugin()],
 			},
 			plugins: [
 				new MiniCssExtractPlugin(),

@@ -1,7 +1,7 @@
 const { merge } = require('webpack-merge')
 const dotenv = require('dotenv-webpack')
 
-const baseConfig = require('./webpack.base.config')
+import baseConfig from './webpack.base.config'
 
 const devConfig = () => {
 	return merge([
