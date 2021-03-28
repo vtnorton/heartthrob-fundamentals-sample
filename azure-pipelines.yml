@@ -34,36 +34,39 @@ stages:
 
           - task: PublishBuildArtifacts@1
             inputs:
-              PathtoPublish: '$(System.DefaultWorkingDirectory)/frontend/dist/'
-              ArtifactName: 'frontend'
-              publishLocation: 'Container'
+              PathtoPublish: "$(System.DefaultWorkingDirectory)/frontend/dist/"
+              ArtifactName: "frontend"
+              publishLocation: "Container"
 
       - job: backend
         displayName: "Build backend"
         steps:
           - task: NuGetCommand@2
             inputs:
-              command: 'restore'
-              restoreSolution: '**/*.sln'
-              feedsToUse: 'select'
-              vstsFeed: '8b2a4880-f26e-4ef5-b8ed-351d2d463c75'
-
-          - script: dotnet build --configuration $(buildConfiguration)
-            displayName: 'dotnet build'
+              command: "restore"
+              restoreSolution: "**/*.sln"
+              feedsToUse: "select"
+              vstsFeed: "8b2a4880-f26e-4ef5-b8ed-351d2d463c75"
 
           - task: DotNetCoreCLI@2
-            displayName: 'Run unit tests'
             inputs:
-              command: 'test'
-              arguments: '--no-build --configuration $(buildConfiguration)'
+              command: "build"
+              configuration: $(buildConfiguration)
+              workingDirectory: "$(System.DefaultWorkingDirectory)/backend"
+
+          - task: DotNetCoreCLI@2
+            displayName: "Run unit tests"
+            inputs:
+              command: "test"
+              arguments: "--no-build --configuration $(buildConfiguration)"
               publishTestResults: true
-              projects: '**/*.Tests.Unit.csproj'
+              projects: "**/*.Tests.Unit.csproj"
 
           - task: PublishBuildArtifacts@1
             inputs:
-              PathtoPublish: '$(System.DefaultWorkingDirectory)/frontend/dist/'
-              ArtifactName: 'backend'
-              publishLocation: 'Container'
+              PathtoPublish: "$(System.DefaultWorkingDirectory)/frontend/dist/"
+              ArtifactName: "backend"
+              publishLocation: "Container"
 
   - stage: release
     displayName: Deploy
@@ -78,37 +81,37 @@ stages:
               steps:
                 - task: DownloadBuildArtifacts@0
                   inputs:
-                    buildType: 'current'
-                    downloadType: 'single'
-                    artifactName: 'frontend'
-                    downloadPath: '$(System.ArtifactsDirectory)'
+                    buildType: "current"
+                    downloadType: "single"
+                    artifactName: "frontend"
+                    downloadPath: "$(System.ArtifactsDirectory)"
                 - task: AzureFileCopy@2
                   inputs:
-                    SourcePath: '$(System.ArtifactsDirectory)/frontend'
-                    azureSubscription: 'Visual Studio Enterprise (66617915-b071-43f5-b408-ccfcf9c4ab1e)'
-                    Destination: 'AzureBlob'
-                    storage: '$(betaStorage)'
-                    ContainerName: '$web'
+                    SourcePath: "$(System.ArtifactsDirectory)/frontend"
+                    azureSubscription: "Visual Studio Enterprise (66617915-b071-43f5-b408-ccfcf9c4ab1e)"
+                    Destination: "AzureBlob"
+                    storage: "$(betaStorage)"
+                    ContainerName: "$web"
 
       - deployment: deploy_backend_beta
         displayName: "Deploy backend (beta)"
         environment: beta_env_back
-        strategy: 
+        strategy:
           runOnce:
             deploy:
               steps:
                 - task: DownloadBuildArtifacts@0
                   inputs:
-                    buildType: 'current'
-                    downloadType: 'single'
-                    artifactName: 'backend'
-                    downloadPath: '$(System.ArtifactsDirectory)'
+                    buildType: "current"
+                    downloadType: "single"
+                    artifactName: "backend"
+                    downloadPath: "$(System.ArtifactsDirectory)"
 
                 - task: AzureRmWebAppDeployment@4
                   inputs:
-                    ConnectionType: 'AzureRM'
-                    azureSubscription: 'Visual Studio Enterprise (66617915-b071-43f5-b408-ccfcf9c4ab1e)'
-                    appType: 'webAppLinux'
-                    WebAppName: '$(webappname)'
-                    packageForLinux: '$(System.ArtifactsDirectory)/backend/'
-                    RuntimeStack: 'DOTNETCORE|5.0'
+                    ConnectionType: "AzureRM"
+                    azureSubscription: "Visual Studio Enterprise (66617915-b071-43f5-b408-ccfcf9c4ab1e)"
+                    appType: "webAppLinux"
+                    WebAppName: "$(webappname)"
+                    packageForLinux: "$(System.ArtifactsDirectory)/backend/"
+                    RuntimeStack: "DOTNETCORE|5.0"
