@@ -99,7 +99,7 @@ stages:
       - deployment: deploy_frontend_beta
         displayName: "Deploy frontend (beta)"
         environment: beta_env
-        dependsOn: beta_env_back
+        dependsOn: deploy_backend_beta
         strategy:
           runOnce:
             deploy:
