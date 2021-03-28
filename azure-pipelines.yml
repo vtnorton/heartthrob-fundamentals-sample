@@ -34,11 +34,12 @@ stages:
               command: "test"
               arguments: "--no-build --configuration $(buildConfiguration)"
               publishTestResults: true
-              projects: "**/*.Tests.Unit.csproj"
+              projects: "$(System.DefaultWorkingDirectory)/backend/HFundamentals.Sample.Tests.Unit/HFundamentals.Sample.Tests.Unit.csproj"
+              workingDirectory: "$(System.DefaultWorkingDirectory)/backend"
 
           - task: PublishBuildArtifacts@1
             inputs:
-              PathtoPublish: "$(System.DefaultWorkingDirectory)/frontend/dist/"
+              PathtoPublish: "$(System.DefaultWorkingDirectory)"
               ArtifactName: "backend"
               publishLocation: "Container"
 
