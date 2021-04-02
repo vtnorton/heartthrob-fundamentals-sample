@@ -21,14 +21,23 @@ stages:
               restoreSolution: "**/*.sln"
               feedsToUse: "select"
               vstsFeed: "8b2a4880-f26e-4ef5-b8ed-351d2d463c75"
+          
+          - task: DotNetCoreCLI@2
+            inputs:
+              command: 'custom'
+              custom: 'tool'
+              arguments: 'install --global dotnet-ef'
+              workingDirectory: '$(System.DefaultWorkingDirectory)/backend/'
+
           - task: efcore-migration-script-generator-task@0
             inputs:
               projectpath: '$(System.DefaultWorkingDirectory)/backend/HFundamentals.Sample/HFundamentals.Sample.csproj'
               databasecontexts: 'ApplicationDbContext'
               startupprojectpath: '$(System.DefaultWorkingDirectory)/backend/HFundamentals.Sample/HFundamentals.Sample.csproj'
               targetfolder: '$(System.DefaultWorkingDirectory)/migrations'
+              configuration: 'Release'
               workingDirectory: '$(System.DefaultWorkingDirectory)/backend'
-
+              
           - task: PublishPipelineArtifact@1
             displayName: 'Publish migrations'
             inputs:
