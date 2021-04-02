@@ -27,21 +27,24 @@ stages:
               command: "build"
               configuration: $(buildConfiguration)
               workingDirectory: "$(System.DefaultWorkingDirectory)/backend"
-
-          - task: DotNetCoreCLI@2
-            displayName: "Run unit tests"
+          
+          - task: VSTest@2
             inputs:
-              command: "test"
-              arguments: "--no-build --configuration $(buildConfiguration)"
-              publishTestResults: true
-              projects: "$(System.DefaultWorkingDirectory)/backend/HFundamentals.Sample.Tests.Unit/HFundamentals.Sample.Tests.Unit.csproj"
-              workingDirectory: "$(System.DefaultWorkingDirectory)/backend"
+              testSelector: 'testAssemblies'
+              testAssemblyVer2: |
+                **\*test*.dll
+                !**\*TestAdapter.dll
+                !**\obj\**
+              searchFolder: '$(System.DefaultWorkingDirectory)/backend'
+              codeCoverageEnabled: true
+              platform: 'Any CPU'
+              configuration: '$(buildConfiguration)'
 
           - task: PublishBuildArtifacts@1
             inputs:
-              PathtoPublish: "$(System.DefaultWorkingDirectory)"
-              ArtifactName: "backend"
-              publishLocation: "Container"
+              PathtoPublish: '$(System.DefaultWorkingDirectory)/backend/HFundamentals.Sample/bin/Debug/net5.0/'
+              ArtifactName: 'backend'
+              publishLocation: 'Container'
 
       - job: frontend
         dependsOn: backend
@@ -88,13 +91,19 @@ stages:
                     artifactName: "backend"
                     downloadPath: "$(System.ArtifactsDirectory)"
 
+                - task: SetJsonProperty@1
+                  inputs:
+                    JsonFile: '$(System.ArtifactsDirectory)/backend/HFundamentals.Sample/bin/Debug/net5.0/appsettings.json'
+                    PropertyPath: 'ConnectionStrings.DefaultConnection'
+                    PropertyValue: '$(betaConnectionString)'
+
                 - task: AzureRmWebAppDeployment@4
                   inputs:
                     ConnectionType: "AzureRM"
                     azureSubscription: "Visual Studio Enterprise (66617915-b071-43f5-b408-ccfcf9c4ab1e)"
                     appType: "webAppLinux"
                     WebAppName: "$(webappname)"
-                    packageForLinux: "$(System.ArtifactsDirectory)/backend/"
+                    packageForLinux: "/backend/"
                     RuntimeStack: "DOTNETCORE|5.0"
 
       - deployment: deploy_frontend_beta
