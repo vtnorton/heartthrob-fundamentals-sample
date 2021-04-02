@@ -1,6 +1,11 @@
 trigger:
-  - develop
-  - main
+  branches:
+    include:
+      - develop
+      - main
+  paths:
+    exclude:
+      - /**/*.md
 
 pool:
   vmImage: windows-latest
@@ -16,6 +21,7 @@ stages:
         displayName: "Create Migrations"
         steps:
           - task: NuGetCommand@2
+            displayName: "Restore NuGet Packages"
             inputs:
               command: "restore"
               restoreSolution: "**/*.sln"
@@ -23,6 +29,7 @@ stages:
               vstsFeed: "8b2a4880-f26e-4ef5-b8ed-351d2d463c75"
           
           - task: DotNetCoreCLI@2
+            displayName: "Install Entity Framework"
             inputs:
               command: 'custom'
               custom: 'tool'
@@ -30,6 +37,7 @@ stages:
               workingDirectory: '$(System.DefaultWorkingDirectory)/backend/'
 
           - task: efcore-migration-script-generator-task@0
+            displayName: "Create migrations"
             inputs:
               projectpath: '$(System.DefaultWorkingDirectory)/backend/HFundamentals.Sample/HFundamentals.Sample.csproj'
               databasecontexts: 'ApplicationDbContext'
@@ -39,7 +47,7 @@ stages:
               workingDirectory: '$(System.DefaultWorkingDirectory)/backend'
               
           - task: PublishPipelineArtifact@1
-            displayName: 'Publish migrations'
+            displayName: 'Publish migrations artifacts'
             inputs:
               targetPath: '$(System.DefaultWorkingDirectory)/migrations'
               artifact: 'migrations'
@@ -49,6 +57,7 @@ stages:
         dependsOn: database_migration
         steps:
           - task: NuGetCommand@2
+            displayName: "Restore NuGet Packages"
             inputs:
               command: "restore"
               restoreSolution: "**/*.sln"
@@ -56,12 +65,14 @@ stages:
               vstsFeed: "8b2a4880-f26e-4ef5-b8ed-351d2d463c75"
 
           - task: DotNetCoreCLI@2
+            displayName: "Build solution"
             inputs:
               command: "build"
               configuration: $(buildConfiguration)
               workingDirectory: "$(System.DefaultWorkingDirectory)/backend"
           
           - task: VSTest@2
+            displayName: "Run tests"
             inputs:
               testSelector: 'testAssemblies'
               testAssemblyVer2: |
@@ -74,6 +85,7 @@ stages:
               configuration: '$(buildConfiguration)'
 
           - task: PublishBuildArtifacts@1
+            displayName: "Publish backend artifcats"
             inputs:
               PathtoPublish: '$(System.DefaultWorkingDirectory)/backend/HFundamentals.Sample/bin/Debug/net5.0/'
               ArtifactName: 'backend'
@@ -84,23 +96,24 @@ stages:
         displayName: "Build frontend"
         steps:
           - task: NodeTool@0
+            displayName: "Install Node.js"
             inputs:
               versionSpec: "10.x"
-            displayName: "Install Node.js"
 
           - script: npm install
-            displayName: "npm install"
+            displayName: "Run intaller"
             workingDirectory: "$(System.DefaultWorkingDirectory)/frontend/"
 
           - script: npm run build
-            displayName: "build"
+            displayName: "Run builder"
             workingDirectory: "$(System.DefaultWorkingDirectory)/frontend/"
 
           - script: npm run test
-            displayName: "test"
+            displayName: "Run tests"
             workingDirectory: "$(System.DefaultWorkingDirectory)/frontend/"
 
           - task: PublishBuildArtifacts@1
+            displayName: "Publish frontend artifacts"
             inputs:
               PathtoPublish: "$(System.DefaultWorkingDirectory)/frontend/dist/"
               ArtifactName: "frontend"
@@ -118,17 +131,18 @@ stages:
             deploy:
               steps:
                 - task: DownloadPipelineArtifact@2
-                  displayName: Download migration script
+                  displayName: "Download migration artifacts"
                   inputs:
                     artifactName: 'migrations'
                     downloadPath: '$(System.ArtifactsDirectory)/migrations'
 
                 - task: SqlAzureDacpacDeployment@1
+                  displayName: "Update database"
                   inputs:
                     azureConnectionType: 'connectedServiceNameARM'
                     azureSubscription: 'Visual Studio Enterprise (66617915-b071-43f5-b408-ccfcf9c4ab1e)'
-                    AuthenticationType: 'server'
-                    ConnectionString: $(betaConnectionString)
+                    AuthenticationType: 'connectionString'
+                    ConnectionString: '$(betaConnectionString)'
                     deployType: 'sqlTask'
                     SqlFile: '$(System.ArtifactsDirectory)/migrations/ApplicationDBContext.sql'
                     IpDetectionMethod: 'AutoDetect'
@@ -142,6 +156,7 @@ stages:
             deploy:
               steps:
                 - task: DownloadBuildArtifacts@0
+                  displayName: "Download backend artifacts"
                   inputs:
                     buildType: "current"
                     downloadType: "single"
@@ -149,12 +164,14 @@ stages:
                     downloadPath: "$(System.ArtifactsDirectory)"
 
                 - task: SetJsonProperty@1
+                  displayName: "Set connection string"
                   inputs:
                     JsonFile: '$(System.ArtifactsDirectory)/backend/appsettings.json'
                     PropertyPath: 'ConnectionStrings.DefaultConnection'
                     PropertyValue: '$(betaConnectionString)'
 
                 - task: AzureRmWebAppDeployment@4
+                  displayName: "Deploy on Azure App Service"
                   inputs:
                     ConnectionType: "AzureRM"
                     azureSubscription: "Visual Studio Enterprise (66617915-b071-43f5-b408-ccfcf9c4ab1e)"
@@ -172,12 +189,14 @@ stages:
             deploy:
               steps:
                 - task: DownloadBuildArtifacts@0
+                  displayName: "Download frontend artifacts"
                   inputs:
                     buildType: "current"
                     downloadType: "single"
                     artifactName: "frontend"
                     downloadPath: "$(System.ArtifactsDirectory)"
                 - task: AzureFileCopy@2
+                  displayName: "Deploy on Azure Blob Storage"
                   inputs:
                     SourcePath: "$(System.ArtifactsDirectory)/frontend"
                     azureSubscription: "Visual Studio Enterprise (66617915-b071-43f5-b408-ccfcf9c4ab1e)"
