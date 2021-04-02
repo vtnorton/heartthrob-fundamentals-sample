@@ -12,6 +12,29 @@ stages:
   - stage: build
     displayName: Build
     jobs:
+      - job: database_migration
+        displayName: "Create Migrations"
+        steps:
+          - task: NuGetCommand@2
+            inputs:
+              command: "restore"
+              restoreSolution: "**/*.sln"
+              feedsToUse: "select"
+              vstsFeed: "8b2a4880-f26e-4ef5-b8ed-351d2d463c75"
+          - task: efcore-migration-script-generator-task@0
+            inputs:
+              projectpath: '$(System.DefaultWorkingDirectory)/backend/HFundamentals.Sample/HFundamentals.Sample.scproject'
+              databasecontexts: 'ApplicationDbContext'
+              startupprojectpath: '$(System.DefaultWorkingDirectory)/backend/HFundamentals.Sample/HFundamentals.Sample.scproject'
+              targetfolder: '$(System.DefaultWorkingDirectory)/migrations'
+              workingDirectory: '$(System.DefaultWorkingDirectory)/backend'
+
+          - task: PublishPipelineArtifact@1
+            displayName: 'Publish migrations'
+            inputs:
+              targetPath: '$(System.DefaultWorkingDirectory)/migrations'
+              artifact: 'migrations'
+
       - job: backend
         displayName: "Build backend"
         steps:
@@ -77,9 +100,33 @@ stages:
     displayName: Deploy
     condition: and(succeeded(), eq(variables['Build.SourceBranch'], 'refs/heads/develop'))
     jobs:
+      - deployment: deploy_db
+        displayName: "Update database (beta)"
+        environment: beta_env_db
+        strategy:
+          runOnce:
+            deploy:
+              steps:
+                - task: DownloadPipelineArtifact@2
+                  displayName: Download migration script
+                  inputs:
+                    artifactName: 'migrations'
+                    downloadPath: '$(System.ArtifactsDirectory)/migrations'
+
+                - task: SqlAzureDacpacDeployment@1
+                  inputs:
+                    azureConnectionType: 'connectedServiceNameARM'
+                    azureSubscription: 'Visual Studio Enterprise (66617915-b071-43f5-b408-ccfcf9c4ab1e)'
+                    AuthenticationType: 'server'
+                    ConnectionString: $(betaConnectionString)
+                    deployType: 'sqlTask'
+                    SqlFile: '$(System.ArtifactsDirectory)/migrations/ApplicationDBContext.sql'
+                    IpDetectionMethod: 'AutoDetect'
+
       - deployment: deploy_backend_beta
         displayName: "Deploy backend (beta)"
         environment: beta_env_back
+        dependsOn: deploy_db
         strategy:
           runOnce:
             deploy:
