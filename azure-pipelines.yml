@@ -103,7 +103,7 @@ stages:
                     azureSubscription: "Visual Studio Enterprise (66617915-b071-43f5-b408-ccfcf9c4ab1e)"
                     appType: "webAppLinux"
                     WebAppName: "$(webappname)"
-                    packageForLinux: "/backend/"
+                    packageForLinux: "$(System.ArtifactsDirectory)/backend/"
                     RuntimeStack: "DOTNETCORE|5.0"
 
       - deployment: deploy_frontend_beta
