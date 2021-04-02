@@ -23,9 +23,9 @@ stages:
               vstsFeed: "8b2a4880-f26e-4ef5-b8ed-351d2d463c75"
           - task: efcore-migration-script-generator-task@0
             inputs:
-              projectpath: '$(System.DefaultWorkingDirectory)/backend/HFundamentals.Sample/HFundamentals.Sample.scproject'
+              projectpath: '$(System.DefaultWorkingDirectory)/backend/HFundamentals.Sample/HFundamentals.Sample.csproj'
               databasecontexts: 'ApplicationDbContext'
-              startupprojectpath: '$(System.DefaultWorkingDirectory)/backend/HFundamentals.Sample/HFundamentals.Sample.scproject'
+              startupprojectpath: '$(System.DefaultWorkingDirectory)/backend/HFundamentals.Sample/HFundamentals.Sample.csproj'
               targetfolder: '$(System.DefaultWorkingDirectory)/migrations'
               workingDirectory: '$(System.DefaultWorkingDirectory)/backend'
 
@@ -37,6 +37,7 @@ stages:
 
       - job: backend
         displayName: "Build backend"
+        dependsOn: database_migration
         steps:
           - task: NuGetCommand@2
             inputs:
