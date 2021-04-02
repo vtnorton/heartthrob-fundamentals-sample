@@ -93,7 +93,7 @@ stages:
 
                 - task: SetJsonProperty@1
                   inputs:
-                    JsonFile: '$(System.ArtifactsDirectory)/backend/HFundamentals.Sample/bin/Debug/net5.0/appsettings.json'
+                    JsonFile: '$(System.ArtifactsDirectory)/backend/appsettings.json'
                     PropertyPath: 'ConnectionStrings.DefaultConnection'
                     PropertyValue: '$(betaConnectionString)'
 
