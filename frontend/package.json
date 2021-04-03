@@ -5,8 +5,8 @@
 	"license": "MIT",
 	"scripts": {
 		"prestart": "node node_modules/react-environments --path=src/environments",
-    "prebuild": "node node_modules/react-environments --path=src/environments",
-		"start": "webpack serve --config config/webpack.config.js --hot --inline --history-api-fallback --env PLATFORM='local' --env VERSION='stag'",
+		"prebuild": "node node_modules/react-environments --path=src/environments",
+		"start": "webpack serve --config config/webpack.config.js --hot --inline --history-api-fallback --env PLATFORM='local' --env VERSION='stag' --env=dev",
 		"build": "webpack --config config/webpack.prod.config.js --progress --env PLATFORM='production' --env VERSION='stag'",
 		"test": "set \"NODE_ICU_DATA=node_modules/full-icu\" && jest --ci --reporters=jest-junit --reporters=default --coverage --coverageReporters=cobertura --coverageReporters=html --passWithNoTests",
 		"test:watch": "set \"NODE_ICU_DATA=node_modules/full-icu\" && jest --watch --coverage",

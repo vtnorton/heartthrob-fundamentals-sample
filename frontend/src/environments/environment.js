@@ -1,4 +1,3 @@
-export default {
-	'heartthrob': 'http://localhost:5000/',
+module.exports = {
+	'heartthrob': '___baseUrl___',
 } 
- 
