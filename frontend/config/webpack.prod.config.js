@@ -1,11 +1,10 @@
 const { merge } = require('webpack-merge')
-const dotenv = require('dotenv-webpack')
 
 const MiniCssExtractPlugin = require('mini-css-extract-plugin')
 const OptimizeCssAssetsPlugin = require('optimize-css-assets-webpack-plugin')
 const TerserPlugin = require('terser-webpack-plugin')
 
-const baseConfig = require('./webpack.base.config')
+const baseConfig = require('./webpack.config')
 
 const prodConfig = () => {
 	return merge([
@@ -27,7 +26,6 @@ const prodConfig = () => {
 			plugins: [
 				new MiniCssExtractPlugin(),
 				new OptimizeCssAssetsPlugin(),
-				new dotenv({ path: '.env.production' }),
 			],
 		},
 	])
