@@ -12,6 +12,10 @@ pool:
 
 variables:
   buildConfiguration: "Release"
+  ${{ if endsWith( variables['Build.SourceBranchName'], 'develop' ) }}: 
+    baseUrl: "https://$(betaWebAppName).azurewebsites.net"
+  ${{ if endsWith( variables['Build.SourceBranchName'], 'main' ) }}: 
+    baseUrl: "https://$(prodWebAppName).azurewebsites.net"
 
 stages:
   - stage: build
@@ -100,6 +104,20 @@ stages:
             inputs:
               versionSpec: "10.x"
 
+          - task: replacetokens@3
+            displayName: "Set environment variables"
+            inputs:
+              targetFiles: '$(System.DefaultWorkingDirectory)/frontend/src/enviroments/*.js'
+              encoding: 'auto'
+              writeBOM: true
+              actionOnMissing: 'warn'
+              keepToken: false
+              tokenPrefix: '___'
+              tokenSuffix: '___'
+              useLegacyPattern: false
+              enableTransforms: false
+              enableTelemetry: false
+
           - script: npm install
             displayName: "Run intaller"
             workingDirectory: "$(System.DefaultWorkingDirectory)/frontend/"
@@ -176,7 +194,7 @@ stages:
                     ConnectionType: "AzureRM"
                     azureSubscription: "Visual Studio Enterprise (66617915-b071-43f5-b408-ccfcf9c4ab1e)"
                     appType: "webAppLinux"
-                    WebAppName: "$(webappname)"
+                    WebAppName: "$(betaWebAppName)"
                     packageForLinux: "$(System.ArtifactsDirectory)/backend/"
                     RuntimeStack: "DOTNETCORE|5.0"
 
