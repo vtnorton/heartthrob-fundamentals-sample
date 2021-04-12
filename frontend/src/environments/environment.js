@@ -1,3 +1,3 @@
 module.exports = {
-	'heartthrob': '___baseUrl___',
-} 
+    "heartthrob": "http://localhost:5000/"
+}
