@@ -12,9 +12,9 @@ pool:
 
 variables:
   buildConfiguration: "Release"
-  ${{ if endsWith( variables['Build.SourceBranchName'], 'develop' ) }}: 
+  ${{ if endsWith( variables['Build.SourceBranchName'], 'develop' ) }}:
     baseUrl: "https://$(betaWebAppName).azurewebsites.net"
-  ${{ if endsWith( variables['Build.SourceBranchName'], 'main' ) }}: 
+  ${{ if endsWith( variables['Build.SourceBranchName'], 'main' ) }}:
     baseUrl: "https://$(prodWebAppName).azurewebsites.net"
 
 stages:
@@ -31,30 +31,30 @@ stages:
               restoreSolution: "**/*.sln"
               feedsToUse: "select"
               vstsFeed: "8b2a4880-f26e-4ef5-b8ed-351d2d463c75"
-          
+
           - task: DotNetCoreCLI@2
             displayName: "Install Entity Framework"
             inputs:
-              command: 'custom'
-              custom: 'tool'
-              arguments: 'install --global dotnet-ef'
-              workingDirectory: '$(System.DefaultWorkingDirectory)/backend/'
+              command: "custom"
+              custom: "tool"
+              arguments: "install --global dotnet-ef"
+              workingDirectory: "$(System.DefaultWorkingDirectory)/backend/"
 
           - task: efcore-migration-script-generator-task@0
             displayName: "Create migrations"
             inputs:
-              projectpath: '$(System.DefaultWorkingDirectory)/backend/HFundamentals.Sample/HFundamentals.Sample.csproj'
-              databasecontexts: 'ApplicationDbContext'
-              startupprojectpath: '$(System.DefaultWorkingDirectory)/backend/HFundamentals.Sample/HFundamentals.Sample.csproj'
-              targetfolder: '$(System.DefaultWorkingDirectory)/migrations'
-              configuration: 'Release'
-              workingDirectory: '$(System.DefaultWorkingDirectory)/backend'
-              
+              projectpath: "$(System.DefaultWorkingDirectory)/backend/HFundamentals.Sample/HFundamentals.Sample.csproj"
+              databasecontexts: "ApplicationDbContext"
+              startupprojectpath: "$(System.DefaultWorkingDirectory)/backend/HFundamentals.Sample/HFundamentals.Sample.csproj"
+              targetfolder: "$(System.DefaultWorkingDirectory)/migrations"
+              configuration: "Release"
+              workingDirectory: "$(System.DefaultWorkingDirectory)/backend"
+
           - task: PublishPipelineArtifact@1
-            displayName: 'Publish migrations artifacts'
+            displayName: "Publish migrations artifacts"
             inputs:
-              targetPath: '$(System.DefaultWorkingDirectory)/migrations'
-              artifact: 'migrations'
+              targetPath: "$(System.DefaultWorkingDirectory)/migrations"
+              artifact: "migrations"
 
       - job: backend
         displayName: "Build backend"
@@ -74,26 +74,26 @@ stages:
               command: "build"
               configuration: $(buildConfiguration)
               workingDirectory: "$(System.DefaultWorkingDirectory)/backend"
-          
+
           - task: VSTest@2
             displayName: "Run tests"
             inputs:
-              testSelector: 'testAssemblies'
+              testSelector: "testAssemblies"
               testAssemblyVer2: |
                 **\*test*.dll
                 !**\*TestAdapter.dll
                 !**\obj\**
-              searchFolder: '$(System.DefaultWorkingDirectory)/backend'
+              searchFolder: "$(System.DefaultWorkingDirectory)/backend"
               codeCoverageEnabled: true
-              platform: 'Any CPU'
-              configuration: '$(buildConfiguration)'
+              platform: "Any CPU"
+              configuration: "$(buildConfiguration)"
 
           - task: PublishBuildArtifacts@1
             displayName: "Publish backend artifcats"
             inputs:
-              PathtoPublish: '$(System.DefaultWorkingDirectory)/backend/HFundamentals.Sample/bin/Debug/net5.0/'
-              ArtifactName: 'backend'
-              publishLocation: 'Container'
+              PathtoPublish: "$(System.DefaultWorkingDirectory)/backend/HFundamentals.Sample/bin/Debug/net5.0/"
+              ArtifactName: "backend"
+              publishLocation: "Container"
 
       - job: frontend
         dependsOn: backend
@@ -105,15 +105,14 @@ stages:
               versionSpec: "10.x"
 
           - task: replacetokens@3
-            displayName: "Set environment variables"
             inputs:
-              targetFiles: '$(System.DefaultWorkingDirectory)/frontend/src/enviroments/*.js'
-              encoding: 'auto'
+              targetFiles: "$(System.DefaultWorkingDirectory)/frontend/.env.prod"
+              encoding: "auto"
               writeBOM: true
-              actionOnMissing: 'warn'
+              actionOnMissing: "warn"
               keepToken: false
-              tokenPrefix: '___'
-              tokenSuffix: '___'
+              tokenPrefix: "___"
+              tokenSuffix: "___"
               useLegacyPattern: false
               enableTransforms: false
               enableTelemetry: false
@@ -151,19 +150,19 @@ stages:
                 - task: DownloadPipelineArtifact@2
                   displayName: "Download migration artifacts"
                   inputs:
-                    artifactName: 'migrations'
-                    downloadPath: '$(System.ArtifactsDirectory)/migrations'
+                    artifactName: "migrations"
+                    downloadPath: "$(System.ArtifactsDirectory)/migrations"
 
                 - task: SqlAzureDacpacDeployment@1
                   displayName: "Update database"
                   inputs:
-                    azureConnectionType: 'connectedServiceNameARM'
-                    azureSubscription: 'Visual Studio Enterprise (66617915-b071-43f5-b408-ccfcf9c4ab1e)'
-                    AuthenticationType: 'connectionString'
-                    ConnectionString: '$(betaConnectionString)'
-                    deployType: 'sqlTask'
-                    SqlFile: '$(System.ArtifactsDirectory)/migrations/ApplicationDBContext.sql'
-                    IpDetectionMethod: 'AutoDetect'
+                    azureConnectionType: "connectedServiceNameARM"
+                    azureSubscription: "Visual Studio Enterprise (66617915-b071-43f5-b408-ccfcf9c4ab1e)"
+                    AuthenticationType: "connectionString"
+                    ConnectionString: "$(betaConnectionString)"
+                    deployType: "sqlTask"
+                    SqlFile: "$(System.ArtifactsDirectory)/migrations/ApplicationDBContext.sql"
+                    IpDetectionMethod: "AutoDetect"
 
       - deployment: deploy_backend_beta
         displayName: "Deploy backend (beta)"
@@ -184,9 +183,9 @@ stages:
                 - task: SetJsonProperty@1
                   displayName: "Set connection string"
                   inputs:
-                    JsonFile: '$(System.ArtifactsDirectory)/backend/appsettings.json'
-                    PropertyPath: 'ConnectionStrings.DefaultConnection'
-                    PropertyValue: '$(betaConnectionString)'
+                    JsonFile: "$(System.ArtifactsDirectory)/backend/appsettings.json"
+                    PropertyPath: "ConnectionStrings.DefaultConnection"
+                    PropertyValue: "$(betaConnectionString)"
 
                 - task: AzureRmWebAppDeployment@4
                   displayName: "Deploy on Azure App Service"

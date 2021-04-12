@@ -1,12 +1,10 @@
-const webpack = require('webpack')
+/* eslint-disable no-undef */
+/* eslint-disable @typescript-eslint/no-var-requires */
 const { merge } = require('webpack-merge')
-
-const MiniCssExtractPlugin = require('mini-css-extract-plugin')
 const HtmlWebpackPlugin = require('html-webpack-plugin')
+const Dotenv = require('dotenv-webpack')
 
-module.exports = (env) => {
-	const { PLATFORM, VERSION } = env
-
+module.exports = () => {
 	return merge([
 		{
 			stats: 'errors-only',
@@ -17,6 +15,9 @@ module.exports = (env) => {
 				},
 			},
 			devtool: 'source-map',
+			devServer: {
+				hotOnly: true,
+			},
 			module: {
 				rules: [
 					{
@@ -39,7 +40,7 @@ module.exports = (env) => {
 					},
 					{
 						test: /\.(css|scss)$/,
-						use: [PLATFORM === 'production' ? MiniCssExtractPlugin.loader : 'style-loader', 'css-loader', 'sass-loader'],
+						use: ['style-loader', 'css-loader', 'sass-loader'],
 					},
 					{
 						test: /\.(png|jpg|jpeg|gif|svg|woff|woff2|ttf|eot)$/,
@@ -55,13 +56,10 @@ module.exports = (env) => {
 				],
 			},
 			plugins: [
+				new Dotenv(),
 				new HtmlWebpackPlugin({
 					template: './src/index.html',
 					filename: './index.html',
-				}),
-				new webpack.DefinePlugin({
-					'process.env.VERSION': JSON.stringify(VERSION),
-					'process.env.PLATFORM': JSON.stringify(PLATFORM),
 				}),
 			],
 		},
