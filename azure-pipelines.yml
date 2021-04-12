@@ -13,9 +13,9 @@ pool:
 variables:
   buildConfiguration: "Release"
   ${{ if endsWith( variables['Build.SourceBranchName'], 'develop' ) }}:
-    baseUrl: "https://$(betaWebAppName).azurewebsites.net"
+    baseUrl: "https://$(betaWebAppName).azurewebsites.net/"
   ${{ if endsWith( variables['Build.SourceBranchName'], 'main' ) }}:
-    baseUrl: "https://$(prodWebAppName).azurewebsites.net"
+    baseUrl: "https://$(prodWebAppName).azurewebsites.net/"
 
 stages:
   - stage: build
