@@ -24,6 +24,20 @@ stages:
       - job: database_migration
         displayName: "Create Migrations"
         steps:
+          - task: replacetokens@3
+            displayName: "Connect to feed"
+            inputs:
+              targetFiles: "$(System.DefaultWorkingDirectory)/backend/nuget.config"
+              encoding: "auto"
+              writeBOM: true
+              actionOnMissing: "warn"
+              keepToken: false
+              tokenPrefix: "___"
+              tokenSuffix: "___"
+              useLegacyPattern: false
+              enableTransforms: false
+              enableTelemetry: false
+
           - task: NuGetCommand@2
             displayName: "Restore NuGet Packages"
             inputs:
@@ -60,6 +74,20 @@ stages:
         displayName: "Build backend"
         dependsOn: database_migration
         steps:
+          - task: replacetokens@3
+            displayName: "Connect to feed"
+            inputs:
+              targetFiles: "$(System.DefaultWorkingDirectory)/backend/nuget.config"
+              encoding: "auto"
+              writeBOM: true
+              actionOnMissing: "warn"
+              keepToken: false
+              tokenPrefix: "___"
+              tokenSuffix: "___"
+              useLegacyPattern: false
+              enableTransforms: false
+              enableTelemetry: false
+
           - task: NuGetCommand@2
             displayName: "Restore NuGet Packages"
             inputs:
@@ -105,6 +133,7 @@ stages:
               versionSpec: "10.x"
 
           - task: replacetokens@3
+            displayName: "Replace token"
             inputs:
               targetFiles: "$(System.DefaultWorkingDirectory)/frontend/.env.prod"
               encoding: "auto"
