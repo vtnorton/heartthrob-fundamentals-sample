@@ -41,10 +41,10 @@ stages:
           - task: NuGetCommand@2
             displayName: "Restore NuGet Packages"
             inputs:
-              command: "restore"
-              restoreSolution: "**/*.sln"
-              feedsToUse: "select"
-              vstsFeed: "8b2a4880-f26e-4ef5-b8ed-351d2d463c75"
+              command: 'restore'
+              restoreSolution: '**/*.sln'
+              feedsToUse: 'config'
+              nugetConfigPath: '$(System.DefaultWorkingDirectory)/backend/nuget.config'
 
           - task: DotNetCoreCLI@2
             displayName: "Install Entity Framework"
@@ -91,10 +91,10 @@ stages:
           - task: NuGetCommand@2
             displayName: "Restore NuGet Packages"
             inputs:
-              command: "restore"
-              restoreSolution: "**/*.sln"
-              feedsToUse: "select"
-              vstsFeed: "8b2a4880-f26e-4ef5-b8ed-351d2d463c75"
+              command: 'restore'
+              restoreSolution: '**/*.sln'
+              feedsToUse: 'config'
+              nugetConfigPath: '$(System.DefaultWorkingDirectory)/backend/nuget.config'
 
           - task: DotNetCoreCLI@2
             displayName: "Build solution"
