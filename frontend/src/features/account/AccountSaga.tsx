@@ -17,6 +17,7 @@ export function* getToken({ payload }: { type: string; payload: LoginRequest }) 
 			yield put(actions.isLoading(false))
 		} else {
 			yield put(actions.setToken({ token: response.value.accessToken }))
+			yield put(push('/'))
 		}
 	} catch (error) {
 		yield call(console.error, 'Houve um erro ao entrar em contato com a API: ', error)
@@ -38,6 +39,7 @@ export function* sendRegister({ payload }: { type: string; payload: RegisterRequ
 			yield put(actions.isLoading(false))
 		} else {
 			yield put(actions.setToken({ token: response.value.accessToken }))
+			yield put(push('/'))
 		}
 	} catch (error) {
 		yield call(console.error, 'Houve um erro ao entrar em contato com a API: ', error)

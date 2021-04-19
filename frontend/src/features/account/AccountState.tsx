@@ -1,5 +1,4 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit'
-import { push } from 'connected-react-router'
 import { AccountState, LoginRequest, RegisterRequest } from './AccountTypes'
 
 const initialState: AccountState = {
@@ -13,7 +12,6 @@ const getToken = (state: AccountState, action: PayloadAction<LoginRequest>) => (
 
 const setToken = (state: AccountState, action: PayloadAction<{ token: string }>) => {
 	localStorage.setItem('token', action.payload.token)
-	push('/')
 	return {
 		...state,
 	}

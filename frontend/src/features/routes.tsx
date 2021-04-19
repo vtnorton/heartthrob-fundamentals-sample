@@ -7,12 +7,11 @@ import AccountRoutes from './account/AccountRoutes'
 import DashboardRoutes from './dashboard/DashboardRoutes'
 import SystemRoutes from './system/SystemRoutes'
 
-const token: string = localStorage.getItem('token')
 const publicRoutes = [].concat(AccountRoutes())
 const privateRoutes = [].concat(SystemRoutes(), DashboardRoutes())
 
  const Features = () : JSX.Element => {
-	const isAuthenticated = () => token ? true : false
+	const isAuthenticated = () => localStorage.getItem('token') ? true : false
 	const PrivateRoute = ({ component: Component, ...rest }) => (
 		<Route
 			{...rest}
