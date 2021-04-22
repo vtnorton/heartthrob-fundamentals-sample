@@ -1,7 +1,7 @@
 import 'heartthrob'
 import { IIconProps, IPersonaSharedProps, Persona, PersonaSize, PrimaryButton } from '@fluentui/react'
 import Card from 'heartthrob-react/src/components/Card'
-import { getIntials } from 'heartthrob-react'
+import { notInformedDateTreatment, notInformedTextTreatment, getIntials } from 'heartthrob-react'
 import Taskbar from 'heartthrob-react/src/components/Card/Taskbar/Taskbar'
 import { useDispatch, useSelector } from 'react-redux'
 import { useEffect, useState } from 'react'
@@ -32,21 +32,7 @@ const ProfileCard = () => {
 		const profileEditIcon: IIconProps = { iconName: 'EditContact' }
 		return <PrimaryButton text='Editar Perfil' iconProps={profileEditIcon} onClick={changePanelState} />
 	}
-
-	const notInformedTextTreatment = (text: string): string => {
-		if (text === null || text === '' || text === undefined) 
-			return 'Não informado.'
 		
-		return text
-	}
-		
-	const notInformedDateTreatment = (date: Date): string => {
-		if(date === undefined || date.toString() === '0001-01-01T00:00:00' )
-			return 'Não informado.'
-			
-		return new Date(date).toLocaleDateString()
-	}
-	
 	useEffect(() => {
 		dispatch(actions.getProfileInfo())
 	}, [dispatch])

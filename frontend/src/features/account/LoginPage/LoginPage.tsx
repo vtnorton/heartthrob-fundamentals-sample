@@ -1,6 +1,7 @@
 import 'heartthrob'
 import { useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
+import { LoadButtonComponent } from 'heartthrob-react'
 import Taskbar from 'heartthrob-react/src/components/Card/Taskbar/Taskbar'
 import {
 	ActionButton,
@@ -15,7 +16,6 @@ import { LoginRequest } from '../AccountTypes'
 import { actions } from '../AccountState'
 import { selectIsLoading } from '../AccountSelectors'
 import { useHistory } from 'react-router-dom'
-import LoadButtonComponent from '../../../components/LoadButtonComponent/LoadButtonComponent'
 
 const LoginPage = (): JSX.Element => {
 	const history = useHistory()

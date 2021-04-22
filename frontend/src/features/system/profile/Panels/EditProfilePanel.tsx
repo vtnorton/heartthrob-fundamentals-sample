@@ -1,11 +1,11 @@
 import { MouseEventHandler, useState } from 'react'
-import { TextField, DatePicker, PrimaryButton, IIconProps, Panel, PanelType } from '@fluentui/react'
-import Taskbar from 'heartthrob-react/src/components/Card/Taskbar/Taskbar'
+import { TextField, DatePicker, IIconProps, Panel, PanelType } from '@fluentui/react'
 import { EditProfileRequest, ProfileInfo } from '../ProfileTypes'
 import { actions } from '../ProfileState'
 import { useDispatch, useSelector } from 'react-redux'
-import LoadButtonComponent from '../../../../components/LoadButtonComponent/LoadButtonComponent'
+import { LoadButtonComponent } from 'heartthrob-react'
 import { selectIsLoadingEditProfile } from '../ProfileSelectors'
+import Taskbar from 'heartthrob-react/src/components/Card/Taskbar/Taskbar'
 
 interface PropsEditProfilePanel {
 	isOpenedPanel: boolean,
