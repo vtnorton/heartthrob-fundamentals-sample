@@ -3,9 +3,8 @@ import { TextField, DatePicker, IIconProps, Panel, PanelType } from '@fluentui/r
 import { EditProfileRequest, ProfileInfo } from '../ProfileTypes'
 import { actions } from '../ProfileState'
 import { useDispatch, useSelector } from 'react-redux'
-import { LoadButtonComponent } from 'heartthrob-react'
+import { Taskbar, LoadButton } from 'heartthrob-react'
 import { selectIsLoadingEditProfile } from '../ProfileSelectors'
-import Taskbar from 'heartthrob-react/src/components/Card/Taskbar/Taskbar'
 
 interface PropsEditProfilePanel {
 	isOpenedPanel: boolean,
@@ -37,7 +36,7 @@ const EditProfilePanel = (props: PropsEditProfilePanel) => {
 	const panelTaskbar = () => {
 		const editProfilePanel = () => {
 			const profileEditIcon: IIconProps = { iconName: 'Save' }
-			return <LoadButtonComponent loadingText='Salvando informações' isLoading={isLoading} text='Salvar alterações' iconProps={profileEditIcon} onClick={editProfile} />
+			return <LoadButton loadingText='Salvando informações' isLoading={isLoading} text='Salvar alterações' iconProps={profileEditIcon} onClick={editProfile} />
 		}
 
 		return <Taskbar buttons={editProfilePanel()} />

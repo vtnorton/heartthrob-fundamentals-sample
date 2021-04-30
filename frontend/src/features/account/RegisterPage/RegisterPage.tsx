@@ -2,14 +2,13 @@ import 'heartthrob'
 import { useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { useHistory } from 'react-router-dom'
-import Taskbar from 'heartthrob-react/src/components/Card/Taskbar/Taskbar'
 import { DefaultButton, IIconProps, TextField } from '@fluentui/react'
 
 import AccountLayout, { showError } from '../AccountLayout/AccountLayout'
 import { selectIsLoading } from '../AccountSelectors'
 import { RegisterRequest } from '../AccountTypes'
 import { actions } from '../AccountState'
-import { LoadButtonComponent, PasswordInput } from 'heartthrob-react'
+import { LoadButton, Taskbar, PasswordInput } from 'heartthrob-react'
 
 const RegisterPage = () => {
 	const history = useHistory()
@@ -41,12 +40,12 @@ const RegisterPage = () => {
 		const loginIcon: IIconProps = { iconName: 'Permissions' }
 
 		return (
-			<LoadButtonComponent loadingText='Registrando' iconProps={registerIcon} disabled={password ? false : true} text='Registrar' onClick={doRegister} isLoading={isLoading} >
+			<LoadButton loadingText='Registrando' iconProps={registerIcon} disabled={password ? false : true} text='Registrar' onClick={doRegister} isLoading={isLoading} >
 				<DefaultButton
 					text='Entrar'
 					onClick={goToLogin}
 					iconProps={loginIcon}/>
-			</LoadButtonComponent>
+			</LoadButton>
 		)
 	}
 

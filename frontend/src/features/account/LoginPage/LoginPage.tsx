@@ -1,8 +1,7 @@
 import 'heartthrob'
 import { useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
-import { LoadButtonComponent } from 'heartthrob-react'
-import Taskbar from 'heartthrob-react/src/components/Card/Taskbar/Taskbar'
+import { Taskbar, LoadButton } from 'heartthrob-react'
 import {
 	ActionButton,
 	Checkbox,
@@ -51,13 +50,13 @@ const LoginPage = (): JSX.Element => {
 		const registerIcon: IIconProps = { iconName: 'PeopleAdd' }
 			
 		return (
-			<LoadButtonComponent loadingText='Entrando' iconProps={loginIcon} text='Entrar' onClick={doLogin} isLoading={isLoading} >
+			<LoadButton loadingText='Entrando' iconProps={loginIcon} text='Entrar' onClick={doLogin} isLoading={isLoading} >
 				<DefaultButton
 					text='Registrar'
 					onClick={goToRegister}
 					iconProps={registerIcon}/>
 			
-			</LoadButtonComponent>
+			</LoadButton>
 		)
 	}
 

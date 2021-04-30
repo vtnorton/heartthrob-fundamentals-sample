@@ -1,5 +1,4 @@
-import { MenuItemType, HeaderProps } from 'heartthrob-react/src/components/Header/HeaderTypes'
-import Header from 'heartthrob-react/src/components/Header/Header'
+import { MenuItemType, HeaderProps, Header } from 'heartthrob-react'
 import jwt_decode from 'jwt-decode'
 
 const HeaderComponent = (): JSX.Element => {

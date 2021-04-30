@@ -1,8 +1,6 @@
 import 'heartthrob'
 import { IIconProps, IPersonaSharedProps, Persona, PersonaSize, PrimaryButton } from '@fluentui/react'
-import Card from 'heartthrob-react/src/components/Card'
-import { notInformedDateTreatment, notInformedTextTreatment, getIntials } from 'heartthrob-react'
-import Taskbar from 'heartthrob-react/src/components/Card/Taskbar/Taskbar'
+import { Taskbar, Card, getIntials, notInformedDateTreatment, notInformedTextTreatment } from 'heartthrob-react'
 import { useDispatch, useSelector } from 'react-redux'
 import { useEffect, useState } from 'react'
 
