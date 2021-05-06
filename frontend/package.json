@@ -9,7 +9,6 @@
 		"test": "set \"NODE_ICU_DATA=node_modules/full-icu\" && jest --ci --reporters=jest-junit --reporters=default --coverage --coverageReporters=cobertura --coverageReporters=html --passWithNoTests",
 		"test:watch": "set \"NODE_ICU_DATA=node_modules/full-icu\" && jest --watch --coverage",
 		"postinstall": "npm update || npm audit fix --force",
-		"preinstall": "npm prune",
 		"lint": "eslint src --ext .ts,.tsx"
 	},
 	"devDependencies": {
