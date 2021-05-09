@@ -1,5 +1,5 @@
 import 'heartthrob'
-import Card from 'heartthrob-react/src/components/Card/index'
+import { Card } from 'heartthrob-react'
 import { useDispatch, useSelector } from 'react-redux'
 import { MessageBar, MessageBarType } from '@fluentui/react'
 
