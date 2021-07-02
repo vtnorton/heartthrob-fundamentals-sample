@@ -1,0 +1,38 @@
+trigger: 
+  branches:
+    include:
+      - main
+      - develop
+    exclude:
+      - release/*
+      - feature/*
+  paths:
+    exclude:
+      - /**/*.md
+      - /docs/**/*
+
+pool:
+  vmImage: windows-latest
+
+variables:
+  buildConfiguration: "Release"
+  baseUrl: "https://$(webAppName).azurewebsites.net/"
+
+stages:
+  - stage: build
+    jobs:
+      - job: db
+      - job: backend
+        steps:
+          - task: NuGetCommand@2
+            inputs:
+              command: 'restore'
+              restoreSolution: '**/*.sln'
+              feedsToUse: 'select'
+              vstsFeed: '8b2a4880-f26e-4ef5-b8ed-351d2d463c75'
+  
+      - job: frontend
+
+  - stage: release
+    dependsOn: build
+    condition: and(succeeded(), eq(variables['Build.SourceBranch'], 'refs/heads/main''))
