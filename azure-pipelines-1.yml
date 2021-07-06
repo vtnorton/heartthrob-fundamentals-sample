@@ -3,9 +3,6 @@ trigger:
     include:
       - main
       - develop
-    exclude:
-      - release/*
-      - feature/*
   paths:
     exclude:
       - /**/*.md
@@ -22,15 +19,54 @@ stages:
   - stage: build
     jobs:
       - job: db
+
       - job: backend
         steps:
+          - task: replacetokens@3
+            inputs:
+              targetFiles: '$(System.DefaultWorkingDirectory)/backend/nuget.config'
+              encoding: 'utf-8'
+              writeBOM: true
+              escapeType: 'json'
+              actionOnMissing: 'warn'
+              keepToken: false
+              tokenPrefix: '___'
+              tokenSuffix: '___'
+              useLegacyPattern: false
+              enableTransforms: false
+              enableTelemetry: true
+
           - task: NuGetCommand@2
             inputs:
               command: 'restore'
               restoreSolution: '**/*.sln'
-              feedsToUse: 'select'
-              vstsFeed: '8b2a4880-f26e-4ef5-b8ed-351d2d463c75'
-  
+              feedsToUse: 'config'
+              nugetConfigPath: '$(System.DefaultWorkingDirectory)/backend/nuget.config'
+          
+          - task: DotNetCoreCLI@2
+            inputs:
+              command: 'build'
+              workingDirectory: '$(System.DefaultWorkingDirectory)/backend'
+              configuration: $(buildConfiguration)
+          
+          - task: DotNetCoreCLI@2
+            inputs:
+              command: 'test'
+              testSelector: "testAssemblies"
+              testAssemblyVer2: |
+                **\*test*.dll
+                !**\*TestAdapter.dll
+                !**\obj\**
+              codeCoverageEnabled: true
+              platform: 'Any CPU'
+              searchFolder: '$(System.DefaultWorkingDirectory)/backend'
+
+          - task: CopyPublishBuildArtifacts@1
+            inputs:
+              PathtoPublish: '$(System.DefaultWorkingDirectory)/backend/HFundamentals.Sample/bin/$(buildConfiguration)/net5.0/'
+              ArtifactName: 'backend'
+              publishLocation: 'Container'
+
       - job: frontend
 
   - stage: release
