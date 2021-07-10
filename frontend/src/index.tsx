@@ -1,15 +1,14 @@
-import { initializeIcons } from '@fluentui/react'
 import { render } from 'react-dom'
 import { Provider } from 'react-redux'
+import InitHeartthrob from 'heartthrob-fundamentals/core'
 
+import Sagas from './features/sagas'
 import Features from './features/routes'
-import InitEnv from './init-env'
-import InitRedux from './init-redux'
-import './assets/styles/index.scss'
+import Reducers from './features/reducers'
 
-const store = InitRedux()
-InitEnv()
-initializeIcons()
+import 'heartthrob-fundamentals/core/assets/styles/shell.scss'
+
+const store = InitHeartthrob(Reducers, Sagas, { systemName: 'hearrthrob' })
 
 render(
 	<Provider store={store}>

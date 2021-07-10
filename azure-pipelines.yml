@@ -12,10 +12,13 @@ pool:
 
 variables:
   buildConfiguration: "Release"
+  version: "0.0"
   ${{ if endsWith( variables['Build.SourceBranchName'], 'develop' ) }}:
     baseUrl: "https://$(betaWebAppName).azurewebsites.net/"
   ${{ if endsWith( variables['Build.SourceBranchName'], 'main' ) }}:
     baseUrl: "https://$(prodWebAppName).azurewebsites.net/"
+
+name: $[format('{0}.{1}', variables.version, counter(variables.version, 0))]
 
 stages:
   - stage: build
@@ -72,7 +75,6 @@ stages:
 
       - job: backend
         displayName: "Build backend"
-        dependsOn: database_migration
         steps:
           - task: replacetokens@3
             displayName: "Connect to feed"
@@ -97,11 +99,11 @@ stages:
               nugetConfigPath: '$(System.DefaultWorkingDirectory)/backend/nuget.config'
 
           - task: DotNetCoreCLI@2
-            displayName: "Build solution"
             inputs:
-              command: "build"
+              command: 'build'
+              projects: '**/*.csproj'
               configuration: $(buildConfiguration)
-              workingDirectory: "$(System.DefaultWorkingDirectory)/backend"
+              workingDirectory: '$(System.DefaultWorkingDirectory)/backend'
 
           - task: VSTest@2
             displayName: "Run tests"
@@ -124,14 +126,8 @@ stages:
               publishLocation: "Container"
 
       - job: frontend
-        dependsOn: backend
         displayName: "Build frontend"
         steps:
-          - task: NodeTool@0
-            displayName: "Install Node.js"
-            inputs:
-              versionSpec: "10.x"
-
           - task: replacetokens@3
             displayName: "Replace token"
             inputs:
@@ -146,9 +142,12 @@ stages:
               enableTransforms: false
               enableTelemetry: false
 
-          - script: npm install
-            displayName: "Run intaller"
-            workingDirectory: "$(System.DefaultWorkingDirectory)/frontend/"
+          - task: Npm@1
+            displayName: 'Install dependencies'
+            inputs:
+              command: 'custom'
+              workingDir: '$(System.DefaultWorkingDirectory)/frontend/'
+              customCommand: 'i --legacy-peer-deps'
 
           - script: npm run build
             displayName: "Run builder"
@@ -185,13 +184,13 @@ stages:
                 - task: SqlAzureDacpacDeployment@1
                   displayName: "Update database"
                   inputs:
-                    azureConnectionType: "connectedServiceNameARM"
-                    azureSubscription: "Visual Studio Enterprise (66617915-b071-43f5-b408-ccfcf9c4ab1e)"
-                    AuthenticationType: "connectionString"
-                    ConnectionString: "$(betaConnectionString)"
-                    deployType: "sqlTask"
-                    SqlFile: "$(System.ArtifactsDirectory)/migrations/ApplicationDBContext.sql"
-                    IpDetectionMethod: "AutoDetect"
+                    azureConnectionType: 'connectedServiceNameARM'
+                    azureSubscription: 'Visual Studio Enterprise(1)(66617915-b071-43f5-b408-ccfcf9c4ab1e)'
+                    AuthenticationType: 'connectionString'
+                    ConnectionString: '$(betaConnectionString)'
+                    deployType: 'sqlTask'
+                    SqlFile: '$(System.ArtifactsDirectory)/migrations/ApplicationDBContext.sql'
+                    IpDetectionMethod: 'AutoDetect'
 
       - deployment: deploy_backend_beta
         displayName: "Deploy backend (beta)"
@@ -219,12 +218,12 @@ stages:
                 - task: AzureRmWebAppDeployment@4
                   displayName: "Deploy on Azure App Service"
                   inputs:
-                    ConnectionType: "AzureRM"
-                    azureSubscription: "Visual Studio Enterprise (66617915-b071-43f5-b408-ccfcf9c4ab1e)"
-                    appType: "webAppLinux"
-                    WebAppName: "$(betaWebAppName)"
-                    packageForLinux: "$(System.ArtifactsDirectory)/backend/"
-                    RuntimeStack: "DOTNETCORE|5.0"
+                    ConnectionType: 'AzureRM'
+                    azureSubscription: 'Visual Studio Enterprise(1)(66617915-b071-43f5-b408-ccfcf9c4ab1e)'
+                    appType: 'webAppLinux'
+                    WebAppName: '$(betaWebAppName)'
+                    packageForLinux: '$(System.ArtifactsDirectory)/backend/'
+                    RuntimeStack: 'DOTNETCORE|5.0'
 
       - deployment: deploy_frontend_beta
         displayName: "Deploy frontend (beta)"
@@ -244,8 +243,27 @@ stages:
                 - task: AzureFileCopy@2
                   displayName: "Deploy on Azure Blob Storage"
                   inputs:
-                    SourcePath: "$(System.ArtifactsDirectory)/frontend"
-                    azureSubscription: "Visual Studio Enterprise (66617915-b071-43f5-b408-ccfcf9c4ab1e)"
-                    Destination: "AzureBlob"
-                    storage: "$(betaStorage)"
-                    ContainerName: "$web"
+                    SourcePath: '$(System.ArtifactsDirectory)/frontend'
+                    azureSubscription: 'Visual Studio Enterprise(1)(66617915-b071-43f5-b408-ccfcf9c4ab1e)'
+                    Destination: 'AzureBlob'
+                    storage: '$(betaStorage)'
+                    ContainerName: '$web'
+
+  - stage: notification
+    displayName: "Notification"
+    dependsOn:
+      - release
+      - build
+    jobs:
+      - job: telegram_notification
+        displayName: "Telegram Notification"
+        steps:
+          - task: SendTelegramNotification@0
+            inputs:
+              botToken: $(telegramKey)
+              chats: $(telegramGroupId)
+              teamUrl: true
+              message: |
+                $(Build.BuildNumber) |   Atualização do sistema
+                Uma nova atualização no sistema foi lançada neste nomento em ambiente beta. 
+                Para fazer os testes entre em https://....

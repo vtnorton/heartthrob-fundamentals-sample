@@ -17,6 +17,7 @@
       "version": "17"
     }
   },
+	"ignorePatterns": ["*.js"],
   "rules": {
     "@typescript-eslint/consistent-type-definitions": ["error", "interface"],
 		"@typescript-eslint/explicit-module-boundary-types": [0],
@@ -41,6 +42,7 @@
 		"max-len": "off",
 		"semi": ["error", "never"],
 		"nonblock-statement-body-position": ["error", "below"],
-		"quotes": ["error", "single"]
+		"quotes": ["error", "single"],
+		"react/display-name": [0]
   }
 }

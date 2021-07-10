@@ -1,7 +1,6 @@
-import { all } from 'redux-saga/effects'
-import AccountSaga from './account/AccountSaga'
-import ProfileSaga from './system/profile/ProfileSaga'
+import { all, AllEffect, ForkEffect } from 'redux-saga/effects'
+import HeartthrobSagas from 'heartthrob-fundamentals/core/features/sagas'
 
-export default function* () {
-	yield all([AccountSaga(), ProfileSaga()])
+export default function* (): Generator<AllEffect<Generator<ForkEffect<never>, void, unknown>>, void, unknown> {
+	yield all([...HeartthrobSagas])
 }
