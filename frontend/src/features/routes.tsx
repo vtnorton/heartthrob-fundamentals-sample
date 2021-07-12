@@ -1,10 +1,13 @@
-import { publicRoutes, privateRoutes, createRoutes } from 'heartthrob-fundamentals/core/features/routes'
+import { createRoutes } from 'heartthrob-fundamentals/core/features/routes'
+import { Route } from 'heartthrob-fundamentals/core/features/types'
 
-const _publicRoutes = publicRoutes.concat()
-const _privateRoutes = privateRoutes.concat()
+import DashboardRoutes from './dashboard/DashboardRoutes'
 
-const Features = (): JSX.Element => {
-	return createRoutes(_privateRoutes, _publicRoutes)
+const _publicRoutes: Route[] = [].concat()
+const _privateRoutes: Route[] = [].concat(DashboardRoutes)
+
+const Features = (props): JSX.Element => {
+	return createRoutes(_privateRoutes, _publicRoutes, props.context)
 }
 
 export default Features

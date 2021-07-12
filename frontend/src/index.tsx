@@ -1,5 +1,5 @@
 import { render } from 'react-dom'
-import { Provider } from 'react-redux'
+import { Provider, ReactReduxContext } from 'react-redux'
 import InitHeartthrob from 'heartthrob-fundamentals/core'
 
 import Sagas from './features/sagas'
@@ -12,7 +12,7 @@ const store = InitHeartthrob(Reducers, Sagas, { systemName: 'hearrthrob' })
 
 render(
 	<Provider store={store}>
-		<Features />
+		<Features context={ReactReduxContext} />
 	</Provider>,
 	document.getElementById('root'),
 )
