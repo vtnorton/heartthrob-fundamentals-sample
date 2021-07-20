@@ -1,1 +1,1 @@
-module.exports = 'test-file-mock'
+module.exports = {}

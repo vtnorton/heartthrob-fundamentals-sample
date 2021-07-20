@@ -351,3 +351,4 @@ MigrationBackup/
 
 dist/
 /frontend/coverage
+/frontend/junit.xml
